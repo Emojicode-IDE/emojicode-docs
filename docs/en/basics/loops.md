@@ -49,7 +49,7 @@ counter
 
 ## 🔂 Going through a list
 
-You can also pass a list ([Lists and Dictionaries](collections.md)) to `🔂`.
+You can also pass a list ([Lists and Dictionaries](collections.md)) to `🔂`. If you pass a string, it takes out the characters one by one ([Strings](strings.md)).
 
 ```emojicode
 🏁 🍇
@@ -99,7 +99,7 @@ infinite loop
 
 ## Leaving a loop early
 
-Emojicode has nothing like `break`, which leaves a loop early, or `continue`, which skips to the next iteration. Either put the exit condition into the loop's condition, or move the loop into a function (method) and return with `↩️`.
+Emojicode has nothing like `break`, which leaves a loop early, or `continue`, which skips to the next iteration. Either put the exit condition into the loop's condition, or move the loop into a function (method) and return with `↩️`. To return from a method that doesn't return a value, write `↩️↩️` ([Classes](../types/classes.md)).
 
 ```emojicode
 🏁 🍇

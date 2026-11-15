@@ -116,7 +116,7 @@ Combining `⬅️` with an operator gives you a short way to write “calculate 
 30
 ```
 
-`score ⬅️➕ 5` means the same as `score ➕ 5 ➡️ 🖍score`. Note that `⬅️` on its own cannot be used for assignment.
+`score ⬅️➕ 5` means the same as `score ➕ 5 ➡️ 🖍score`. Note that `⬅️` on its own cannot be used for assignment. Also, `⬅️➕` and the like work only on variables, not on list elements ([Lists and Dictionaries](collections.md)).
 
 ```keywords
 +=
@@ -185,7 +185,7 @@ type conversion
 
 The `💯 7❗️` in the last line is a call to the method that turns the integer `7` into a real number. The `1` in `🔡 … 1❗️` is how many digits after the decimal point to include in the string.
 
-`✖️` and `➗` are calculated before `➕` and `➖`. To calculate something first, wrap it in `🤜` and `🤛` (the `(` `)` of other languages).
+`✖️`, `➗`, and `🚮` are calculated before `➕` and `➖`. To calculate something first, wrap it in `🤜` and `🤛` (the `(` `)` of other languages). The order including comparison and bitwise operators is summarized in [Bitwise Operations and Numbers](../advanced/numbers.md).
 
 ```keywords
 parentheses

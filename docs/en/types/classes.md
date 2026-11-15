@@ -82,6 +82,31 @@ Inside an initializer, you store a value in an instance variable with `➡️ �
 
 Instance variables cannot be seen from outside the class. If you want to show a value to the outside, provide a method that returns it, like `🧾` above.
 
+To return early from a method that doesn't return a value, write `↩️↩️`. A lone `↩️` is read as being followed by a value to return, and you get a compile error.
+
+```emojicode
+🐇 🧪 🍇
+  🆕 🍇🍉
+
+  ❗️ 🔔 n 🔢 🍇
+    ↪️ n 🙌 0 🍇
+      ↩️↩️
+    🍉
+    😀 🔤🧲🔡 n❗️🧲 is not 0🔤❗️
+  🍉
+🍉
+
+🏁 🍇
+  🆕🧪❗️ ➡️ test
+  🔔 test 0❗️
+  🔔 test 1❗️
+🍉
+```
+
+```output
+1 is not 0
+```
+
 ```keywords
 method
 member function
@@ -89,6 +114,8 @@ argument
 parameter
 return value
 return
+return;
+early return
 getter
 private
 encapsulation
@@ -243,10 +270,77 @@ If you use one of them, you get the compile error `Expected Identifier`.
 Expected Identifier
 ```
 
+Also, you can't create a type with the same name as a type in the standard library `s`. Besides `🔢` and `🍨`, there are types such as `🌳` that aren't in the [Emoji Quick Reference](../reference/emoji.md). If you get the error `is already defined`, pick another emoji.
+
+```emojicode error
+🐇 🌳 🍇
+  🆕 🍇🍉
+🍉
+
+🏁 🍇
+  🆕🌳❗️ ➡️ tree
+🍉
+```
+
+```text
+is already defined
+```
+
 ```keywords
 naming
 name
 identifier
 reserved word
 keyword
+already defined
+```
+
+## Names made of two or more emoji (🔸)
+
+The name of a type or method is one emoji. To make two or more emoji into one name, join them with `🔸`. Write it the same way when you call it.
+
+```emojicode
+🐇 🧮 🍇
+  🆕 🍇🍉
+
+  ❗️ 🔝🔸🔢 ➡️ 🔢 🍇
+    ↩️ 1
+  🍉
+🍉
+
+🏁 🍇
+  😀 🔡 🔝🔸🔢 🆕🧮❗️❗️❗️❗️
+🍉
+```
+
+```output
+1
+```
+
+If you put `🔝🔢` side by side without `🔸`, the name is just `🔝`, and it is read as having an extra `🔢` after it. The error looks like `Expected BlockBegin`, which makes it hard to tell that the name is the cause, so be careful.
+
+```emojicode error
+🐇 🧮 🍇
+  🆕 🍇🍉
+
+  ❗️ 🔝🔢 ➡️ 🔢 🍇
+    ↩️ 1
+  🍉
+🍉
+
+🏁 🍇
+  😀 🔡 🔝🔢 🆕🧮❗️❗️❗️❗️
+🍉
+```
+
+```text
+Expected BlockBegin
+```
+
+```keywords
+🔸
+multiple emoji
+long name
+joining names
+Expected BlockBegin
 ```

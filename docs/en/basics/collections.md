@@ -66,6 +66,19 @@ aBc
 | `🐨 list index❗️` | Remove the element at that index |
 | `🐼 list❗️` | Take out the last element and remove it (`🍬`) |
 
+Assignments with an operation such as `⬅️➕` ([Values and Variables](values.md)) can't be used on list elements. Calculate first and store the result back with `➡️` (`🐽 list 1❗️ ➕ 10 ➡️ 🐽list 1❗️`).
+
+```emojicode error
+🏁 🍇
+  🍿 1 2 3 🍆 ➡️ 🖍🆕 list
+  🐽 list 1❗️ ⬅️➕ 10
+🍉
+```
+
+```text
+Unexpected token LeftProductionOperator
+```
+
 ```keywords
 push_back
 append
@@ -97,6 +110,123 @@ You create an empty list with `🆕🍨🐚element type🍆❗️`.
 
 ```output
 1 4 9 16 25 
+```
+
+### Repeating a value
+
+`🆕🍨🐚element type🍆 value count❗️` creates a list with the same value repeated count times. Use it to create a table of a fixed size.
+
+```emojicode
+🏁 🍇
+  🆕🍨🐚🔢🍆 0 5❗️ ➡️ 🖍🆕 counts
+  3 ➡️ 🐽counts 2❗️
+  😀 🆕🔡 🐰 counts 🍇 n 🔢 ➡️ 🔡 ↩️ 🔡 n❗️ 🍉❗️ 🔤 🔤❗️❗️
+  🆕🍨🐚🔡🍆 🔤x🔤 3❗️ ➡️ marks
+  😀 🆕🔡 marks 🔤,🔤❗️❗️
+🍉
+```
+
+```output
+0 0 3 0 0
+x,x,x
+```
+
+The value comes first and the count second. There is no way to pass only the count (`🆕🍨🐚🔢🍆 5❗️`).
+
+```keywords
+vector(n, x)
+fill
+initialize
+same value
+n copies
+table
+```
+
+### Lists are copied
+
+A list is a value type ([Value Types and Enumerations](../types/valuetypes.md)). Its contents are copied when you assign it, pass it to a method or initializer, or store it in an instance variable. The same goes for dictionaries.
+
+```emojicode
+🐇 📦 🍇
+  🖍🆕 items 🍨🐚🔢🍆
+  🆕 🍼 items 🍨🐚🔢🍆 🍇🍉
+  ❗️ 📏 ➡️ 🔢 🍇
+    ↩️ 📏 items❓
+  🍉
+🍉
+
+🏁 🍇
+  🍿 1 2 🍆 ➡️ 🖍🆕 a
+  a ➡️ 🖍🆕 b
+  🐻 b 3❗️
+  😀 🔤a: 🧲🔡 📏 a❓❗️🧲, b: 🧲🔡 📏 b❓❗️🧲🔤❗️
+  🆕📦 a❗️ ➡️ box
+  🐻 a 4❗️
+  😀 🔡 📏 box❗️❗️❗️
+🍉
+```
+
+```output
+a: 2, b: 3
+2
+```
+
+Adding to `b` doesn't change `a`. Even if you add to `a` after storing it in `box`, `box` still holds 2 elements.
+
+A method's arguments are constants, so you can't even `🐻` to a list you receive. If you want to modify a list inside a method, either return the modified list with `↩️`, or make the list an instance variable and modify it from that class's methods.
+
+```emojicode error
+🐇 🧰 🍇
+  🐇❗️ 🖊 list 🍨🐚🔢🍆 🍇
+    🐻 list 5❗️
+  🍉
+🍉
+
+🏁 🍇
+  🆕🍨🐚🔢🍆❗️ ➡️ a
+  🖊🐇🧰 a❗️
+🍉
+```
+
+```text
+Cannot modify constant variable "list".
+```
+
+```keywords
+copy
+pass by value
+pass by reference
+reference
+value type
+```
+
+### Lists of lists
+
+You can also create a list whose elements are lists, such as `🍨🐚🍨🐚🔢🍆🍆`. You can modify an inner list in place by calling `🐻` directly on the result of `🐽`, or by storing a value with `➡️` into a position given by two nested `🐽`.
+
+```emojicode
+🏁 🍇
+  🍿 🍿 1 2 🍆 🍿 3 🍆 🍆 ➡️ 🖍🆕 grid
+  🐻 🐽 grid 1❗️ 4❗️
+  9 ➡️ 🐽🐽 grid 0❗️ 1❗️
+  🔂 row grid 🍇
+    😀 🆕🔡 🐰 row 🍇 n 🔢 ➡️ 🔡 ↩️ 🔡 n❗️ 🍉❗️ 🔤 🔤❗️❗️
+  🍉
+🍉
+```
+
+```output
+1 9
+3 4
+```
+
+```keywords
+2D array
+two-dimensional array
+multidimensional array
+vector<vector>
+adjacency list
+grid
 ```
 
 ### Sorting, mapping, and filtering

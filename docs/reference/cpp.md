@@ -133,6 +133,7 @@ not
 | `s.find(t)` | `🔍 s t❗️` | [文字列](../basics/strings.md) |
 | `toupper` | `📫 s❗️` | [文字列](../basics/strings.md) |
 | `s.size()` | `📐 s❗️`（バイト数） | [文字列](../basics/strings.md) |
+| `for (char c : s)` | `🔂 c s 🍇 … 🍉`（`c` は `🔡`） | [文字列](../basics/strings.md) |
 
 ```keywords
 to_string
@@ -195,6 +196,7 @@ while
 |---|---|---|
 | `std::vector<int64_t>` | `🍨🐚🔢🍆`（リスト） | [リストと辞書](../basics/collections.md) |
 | `std::vector<int64_t> v{1, 2, 3};` | `🍿 1 2 3 🍆 ➡️ v` | [リストと辞書](../basics/collections.md) |
+| `std::vector<int64_t> v(n, x);` | `🆕🍨🐚🔢🍆 x n❗️ ➡️ v` | [リストと辞書](../basics/collections.md) |
 | `v[i]` | `🐽 v i❗️` | [リストと辞書](../basics/collections.md) |
 | `v.size()` | `📏 v❓` | [リストと辞書](../basics/collections.md) |
 | `std::map<std::string, int64_t>` / `std::unordered_map` | `🍯🐚🔢🍆`（辞書。キーは `🔡`） | [リストと辞書](../basics/collections.md) |

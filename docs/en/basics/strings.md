@@ -166,6 +166,43 @@ Not a number
 
 `↪️` and `🙅` are conditionals (if and else). Optionals are covered in detail in a later chapter.
 
+### Character → character code
+
+`📇 string❗️` turns a string into its UTF-8 byte sequence (`📇`). `🐽 bytes index❗️` takes out the byte at that index (`💧`), and `🔢 byte❗️` turns it into an integer. ASCII characters such as letters, digits, and symbols are 1 byte each, so this is their character code.
+
+```emojicode
+🏁 🍇
+  😀 🔡 🔢 🐽 📇 🔤A🔤❗️ 0❗️❗️❗️❗️
+  🔂 c 🔤hello🔤 🍇
+    💭 a number with a as 0, b as 1, …
+    👄 🔤🧲🔢 🐽 📇 c❗️ 0❗️❗️ ➖ 97🧲 🔤❗️
+  🍉
+  😀 🔤🔤❗️
+🍉
+```
+
+```output
+65
+7 4 11 11 14 
+```
+
+`🔂 c 🔤hello🔤` is a loop that takes the characters out of a string one by one (see “Going through characters” below).
+
+A byte of 128 or more becomes a negative number when turned into `🔢`. Japanese characters and emoji are 2 bytes or more, and every one of those bytes is 128 or more, so use this only for ASCII characters.
+
+To go from a number back to a character, take it out of a string that lists the characters, as in `🔪 🔤abcdefghijklmnopqrstuvwxyz🔤 number 1❗️`.
+
+```keywords
+character code
+ASCII
+ord
+chr
+char
+c - 'a'
+code point
+byte
+```
+
 ## Common methods
 
 ```keywords
@@ -221,6 +258,73 @@ length
 string length
 character count
 byte count
+```
+
+## Going through characters
+
+`🔂 name string` takes the visible characters out of a string one by one ([Loops](loops.md)). Each character is itself a string (`🔡`), so compare it with a one-character string using `🙌`.
+
+```emojicode
+🏁 🍇
+  🔂 c 🔤a🍎え👨‍👩‍👧🔤 🍇
+    😀 🔤[🧲c🧲]🔤❗️
+  🍉
+  0 ➡️ 🖍🆕 ones
+  🔂 c 🔤10110🔤 🍇
+    ↪️ c 🙌 🔤1🔤 🍇
+      ones ⬅️➕ 1
+    🍉
+  🍉
+  😀 🔡 ones❗️❗️
+🍉
+```
+
+```output
+[a]
+[🍎]
+[え]
+[👨‍👩‍👧]
+3
+```
+
+Strings have no `🐽` method for taking the i-th character, as lists do.
+
+```emojicode error
+🏁 🍇
+  😀 🐽 🔤abcde🔤 2❗️❗️
+🍉
+```
+
+```text
+has no suitable 🐽
+```
+
+If you use the i-th character many times, first turn the string into a list of its characters (`🍨🐚🔡🍆`) with `🎶 string❗️`, then take them out with `🐽`.
+
+```emojicode
+🏁 🍇
+  🎶 🔤abc🔤❗️ ➡️ chars
+  😀 🐽 chars 1❗️❗️
+  😀 🔡 📏 chars❓❗️❗️
+🍉
+```
+
+```output
+b
+3
+```
+
+`🔪 string i 1❗️` also gives you the i-th character, but `🔪` counts the characters from the start every time, so the later the position, the longer it takes. Taking the characters of a long string out one by one with `🔪` takes time proportional to the square of its length in total, about 5 seconds for 40,000 characters. With `🔂` or `🎶`, even 500,000 characters take about 0.2 seconds.
+
+```keywords
+character by character
+character
+char
+s[i]
+at
+for (char c : s)
+graphemes
+slow
 ```
 
 ## Comparing strings

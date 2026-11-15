@@ -161,6 +161,123 @@ multiple protocols
 signature mismatch
 ```
 
+## Mutating a list inside a copied list also changes the copy
+
+A list is copied, contents and all, when you assign it ([Lists and Dictionaries](../basics/collections.md)). In the official compiler, however, mutating an element in place through `🐽` after copying also changes the copy. This happens when you append to an inner list with `🐻 🐽 a 0❗️ 2❗️`, or call a `🖍❗️` method of a value type on `🐽 a 0❗️`. Assigning to an element directly, as in `9 ➡️ 🐽 a 0❗️`, is not affected.
+
+```emojicode
+🏁 🍇
+  🍿 🍿 1 🍆 🍆 ➡️ 🖍🆕 a
+  a ➡️ b
+  🐻 🐽 a 0❗️ 2❗️
+  9 ➡️ 🐽🐽 a 0❗️ 0❗️
+  😀 🔤a: length 🧲🔡 📏 🐽 a 0❗️❓❗️🧲, first is 🧲🔡 🐽🐽 a 0❗️ 0❗️❗️🧲🔤❗️
+  😀 🔤b: length 🧲🔡 📏 🐽 b 0❗️❓❗️🧲, first is 🧲🔡 🐽🐽 b 0❗️ 0❗️❗️🧲🔤❗️
+🍉
+```
+
+```output Result in this IDE
+a: length 2, first is 9
+b: length 1, first is 1
+```
+
+```official
+a: length 2, first is 9
+b: length 2, first is 9
+```
+
+Copying a list does not duplicate its contents right away; they are duplicated the first time the list is mutated (copy-on-write). `🐽` returns a reference (`✴️`) to the element itself rather than a copy, and the mutation goes through that reference. The official compiler does not duplicate the outer list at that point, so it mutates the element that the original and the copy still share.
+
+The patch duplicates the outer list first whenever an element returned with `✴️` is mutated (the list's `📝` does the duplication).
+
+```patch Compiler/AST/ASTMethod.cpp
+```
+
+```patch Compiler/AST/ASTMethod_CG.cpp
+```
+
+```keywords
+list
+copy
+copy-on-write
+nested list
+2D array
+vector
+reference
+```
+
+## Converting the smallest integer to a string breaks it
+
+In the official compiler, converting the smallest `🔢` value (-9223372036854775808) to a string with `🔡` prints 18 NUL characters followed by `-8`. When it is interpolated into a string, unrelated memory can show up too.
+
+```emojicode
+🏁 🍇
+  -9223372036854775807 ➖ 1 ➡️ smallest
+  😀 🔡 smallest❗️❗️
+  😀 🔡 smallest 16❗️❗️
+🍉
+```
+
+```output Result in this IDE
+-9223372036854775808
+-8000000000000000
+```
+
+```official
+(18 NUL characters followed by -8)
+(15 NUL characters followed by -0)
+```
+
+The sign is removed before the digits are produced, but negating the smallest value overflows the range of `🔢`. The patch negates it as an unsigned integer.
+
+The official compiler's digit table is also missing `w`, so with a base above 32, digits of 32 or more come out shifted. For example, `🔡 32 33❗️` gives `x` instead of `w`, and `🔡 35 36❗️` gives `0` instead of `z`. The patch fixes the table as well.
+
+```patch s/Integer.cpp
+```
+
+```keywords
+integer
+minimum
+INT64_MIN
+LLONG_MIN
+to string
+to_string
+base
+radix
+base 36
+```
+
+## `🔫` never finishes with an empty separator
+
+In the official compiler, passing an empty string to `🔫` (split a string) never finishes.
+
+```emojicode
+🏁 🍇
+  🔂 part 🔫 🔤abc🔤 🔤🔤❗️ 🍇
+    😀 part❗️
+  🍉
+🍉
+```
+
+```output Result in this IDE
+abc
+```
+
+```official
+(never finishes)
+```
+
+An empty string is “found” at every position, so the position where the next search starts never moves forward. With the patch, an empty separator returns a list that holds only the original string. To take a string apart one character at a time, loop over it with `🔂` ([Strings](../basics/strings.md)).
+
+```patch s/🔡.🍇
+```
+
+```keywords
+split
+empty string
+infinite loop
+```
+
 ## Changes for running on WebAssembly
 
 These are not bugs, but places where this IDE changes the official compiler so that it can run inside the browser.

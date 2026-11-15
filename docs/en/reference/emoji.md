@@ -1,8 +1,8 @@
 # Emoji Quick Reference
 
-This is a list of the emoji that the Emojicode compiler treats specially as “keywords.” Any emoji not listed here can be used freely as the name of a type, method, or variable (though [newer emoji may not work](../about/known-issues.md)).
+This is a list of the emoji that the Emojicode compiler treats specially as “keywords.” Any emoji not listed here can be used as the name of a type, method, or variable (though [newer emoji may not work](../about/known-issues.md)).
 
-Types such as `🔢` `🔡` `🍨` are not keywords; they are types defined in the standard library `s`. They are collected at the end.
+Types such as `🔢` `🔡` `🍨` are not keywords; they are types defined in the standard library `s`. The main ones are collected at the end. You can't create a type with the same name as a type in the standard library. Emoji such as `🌳`, which aren't in that last table, can't be used either, so if you get the error `is already defined`, pick another emoji ([Classes](../types/classes.md)).
 
 ## Program structure
 
@@ -59,7 +59,7 @@ Types such as `🔢` `🔡` `🍨` are not keywords; they are types defined in t
 | `🙅` | Otherwise (else) | [Conditionals](../basics/control.md) |
 | `🔂` | Go through a range or list in order (for) | [Loops](../basics/loops.md) |
 | `🔁` | While a condition holds (while) | [Loops](../basics/loops.md) |
-| `↩️` | Return a value (return) | [Classes](../types/classes.md) |
+| `↩️` | Return a value (return). To return from a method that doesn't return a value, `↩️↩️` | [Classes](../types/classes.md) |
 
 ## Defining types
 
@@ -111,7 +111,7 @@ Types such as `🔢` `🔡` `🍨` are not keywords; they are types defined in t
 | `◼️` | Returns no value (written where the return type goes) | [Miscellaneous Syntax](../advanced/misc.md) |
 | `✴️` | Return a reference to the contents of a value type | [Memory and References](../advanced/memory.md) |
 | `⚖️` | Size of a type (in bytes) | [Miscellaneous Syntax](../advanced/misc.md) |
-| `🔸` | Join two emoji into one name (such as `🚧🔸↕️`) | |
+| `🔸` | Join two emoji into one name (such as `🚧🔸↕️`) | [Classes](../types/classes.md) |
 
 ## Packages
 
@@ -146,11 +146,11 @@ These are not keywords, but they are commonly used types.
 | `💯` | Real number | [Values and Variables](../basics/values.md) |
 | `👌` | Boolean | [Values and Variables](../basics/values.md) |
 | `🔡` | String | [Strings](../basics/strings.md) |
-| `💧` | Byte (an integer from 0 to 255) | |
+| `💧` | Byte | [Strings](../basics/strings.md) |
 | `🍨` | List | [Lists and Dictionaries](../basics/collections.md) |
 | `🍯` | Dictionary | [Lists and Dictionaries](../basics/collections.md) |
 | `⏩` | Range | [Loops](../basics/loops.md) |
-| `📇` | Byte sequence (data) | |
+| `📇` | Byte sequence (data) | [Strings](../basics/strings.md) |
 | `📶` | Weak reference | [Memory and References](../advanced/memory.md) |
 | `🍡` `🔂` | Iterator, and the protocol for types you can loop over | [Iterating Your Own Types with 🔂](../types/iteration.md) |
 | `🚧` | Error with a message | [Error Handling](../types/errors.md) |

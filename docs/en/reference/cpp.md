@@ -133,6 +133,7 @@ logical operators
 | `s.find(t)` | `🔍 s t❗️` | [Strings](../basics/strings.md) |
 | `toupper` | `📫 s❗️` | [Strings](../basics/strings.md) |
 | `s.size()` | `📐 s❗️` (number of bytes) | [Strings](../basics/strings.md) |
+| `for (char c : s)` | `🔂 c s 🍇 … 🍉` (`c` is a `🔡`) | [Strings](../basics/strings.md) |
 
 ```keywords
 to_string
@@ -195,6 +196,7 @@ while
 |---|---|---|
 | `std::vector<int64_t>` | `🍨🐚🔢🍆` (list) | [Lists and Dictionaries](../basics/collections.md) |
 | `std::vector<int64_t> v{1, 2, 3};` | `🍿 1 2 3 🍆 ➡️ v` | [Lists and Dictionaries](../basics/collections.md) |
+| `std::vector<int64_t> v(n, x);` | `🆕🍨🐚🔢🍆 x n❗️ ➡️ v` | [Lists and Dictionaries](../basics/collections.md) |
 | `v[i]` | `🐽 v i❗️` | [Lists and Dictionaries](../basics/collections.md) |
 | `v.size()` | `📏 v❓` | [Lists and Dictionaries](../basics/collections.md) |
 | `std::map<std::string, int64_t>` / `std::unordered_map` | `🍯🐚🔢🍆` (dictionary; keys are `🔡`) | [Lists and Dictionaries](../basics/collections.md) |

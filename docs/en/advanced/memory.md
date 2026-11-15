@@ -141,7 +141,7 @@ memory leak
 
 ## Value types are copied, classes are referenced
 
-A value type (`🕊`) is copied when you assign it ([Value Types and Enumerations](../types/valuetypes.md)), but a class still points to the same instance after assignment.
+A value type (`🕊`) is copied when you assign it ([Value Types and Enumerations](../types/valuetypes.md)), but a class still points to the same instance after assignment. The standard library's lists (`🍨`) and dictionaries (`🍯`) are value types too ([Lists and Dictionaries](../basics/collections.md)).
 
 ```emojicode
 🐇 📦 🍇
