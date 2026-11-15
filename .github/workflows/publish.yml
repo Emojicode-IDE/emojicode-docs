@@ -1,0 +1,28 @@
+name: publish
+
+# main に入ったら、サイト（Emojicode-IDE/emojicode-ide）のビルドとデプロイを呼ぶ。
+# サイト側は、この時点の main の原稿でコード例を実行して確かめてから公開する。
+# secrets.SITE_DISPATCH_TOKEN：emojicode-ide に対して Contents: Read and write を持つ fine-grained token。
+# ない間は何もしない（fork からの PR では secrets は渡らないので、ここは main への push だけで動く）
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Trigger site build
+        env:
+          GH_TOKEN: ${{ secrets.SITE_DISPATCH_TOKEN }}
+        run: |
+          if [ -z "$GH_TOKEN" ]; then
+            echo "::notice::SITE_DISPATCH_TOKEN がないので、サイトのビルドは呼ばない"
+            exit 0
+          fi
+          gh api repos/Emojicode-IDE/emojicode-ide/dispatches -f event_type=docs-updated -f "client_payload[sha]=$GITHUB_SHA"

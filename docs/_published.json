@@ -1,0 +1,25 @@
+{
+  "_comment": "公開済みの記事。NEW は「はじめて来たときより後に増えた、まだ開いていない記事」につく（web/src/search.ts の newPages）。この一覧は、その仕組みより前から来ている人の判定にだけ使う",
+  "pages": [
+    "about/ide",
+    "about/known-issues",
+    "about/patched",
+    "basics/collections",
+    "basics/control",
+    "basics/input",
+    "basics/loops",
+    "basics/optionals",
+    "basics/strings",
+    "basics/values",
+    "index",
+    "intro/hello",
+    "reference/cpp",
+    "types/classes",
+    "types/closures",
+    "types/errors",
+    "types/generics",
+    "types/inheritance",
+    "types/protocols",
+    "types/valuetypes"
+  ]
+}

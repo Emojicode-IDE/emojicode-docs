@@ -1,0 +1,62 @@
+[
+  {
+    "title": "Getting started",
+    "pages": [
+      "index",
+      "intro/hello"
+    ]
+  },
+  {
+    "title": "Basics",
+    "pages": [
+      "basics/values",
+      "basics/strings",
+      "basics/control",
+      "basics/loops",
+      "basics/collections",
+      "basics/optionals",
+      "basics/input"
+    ]
+  },
+  {
+    "title": "Making types",
+    "pages": [
+      "types/classes",
+      "types/inheritance",
+      "types/valuetypes",
+      "types/protocols",
+      "types/generics",
+      "types/iteration",
+      "types/closures",
+      "types/errors",
+      "types/casting"
+    ]
+  },
+  {
+    "title": "Advanced",
+    "pages": [
+      "advanced/classes",
+      "advanced/memory",
+      "advanced/numbers",
+      "advanced/packages",
+      "advanced/misc"
+    ]
+  },
+  {
+    "title": "Reference",
+    "pages": [
+      "reference/emoji",
+      "reference/cpp"
+    ]
+  },
+  {
+    "title": "About this IDE",
+    "separate": true,
+    "pages": [
+      "about/ide",
+      "about/known-issues",
+      "about/patched",
+      "about/privacy"
+    ]
+  }
+]

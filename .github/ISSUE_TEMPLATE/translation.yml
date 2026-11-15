@@ -1,0 +1,21 @@
+name: 翻訳 / Translation
+description: 訳の誤り・不自然な訳・新しい言語の相談 / Wrong or awkward translations, or proposing a new language
+labels: [translation]
+body:
+  - type: input
+    id: lang
+    attributes:
+      label: 言語 / Language
+      placeholder: en
+    validations:
+      required: true
+  - type: input
+    id: where
+    attributes:
+      label: ページの URL か、画面の場所 / Page URL or place in the UI
+  - type: textarea
+    id: details
+    attributes:
+      label: 内容 / Details
+    validations:
+      required: true

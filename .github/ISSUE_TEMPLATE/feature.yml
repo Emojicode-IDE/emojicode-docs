@@ -1,0 +1,14 @@
+name: 要望 / Feature request
+description: IDE やドキュメントへの要望 / Ideas for the IDE or the docs
+labels: [enhancement]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: 要望 / Idea
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: 困っていること・理由 / Problem or motivation

@@ -1,0 +1,31 @@
+name: IDE の不具合 / IDE bug
+description: エディタ・実行・画面の不具合 / Problems with the editor, running code, or the UI
+labels: [bug, ide]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: 何が起きたか / What happened
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 再現する手順 / Steps to reproduce
+      placeholder: |
+        1.
+        2.
+        3.
+  - type: textarea
+    id: code
+    attributes:
+      label: コード（あれば） / Code (if any)
+      description: URL の #code=… の共有リンクでも OK / A share link (#code=…) is fine too
+      render: text
+  - type: input
+    id: env
+    attributes:
+      label: ブラウザと OS / Browser and OS
+      placeholder: Chrome 140 / Android 15
+    validations:
+      required: true

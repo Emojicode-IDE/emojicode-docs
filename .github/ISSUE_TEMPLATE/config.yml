@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Emojicode 言語そのものについて（公式） / About the Emojicode language itself (official)
+    url: https://github.com/emojicode/emojicode/issues
+    about: このプロジェクトは非公式です。言語の仕様や公式コンパイラについては公式のリポジトリへ。 / This project is unofficial. For the language or the official compiler, use the official repository.

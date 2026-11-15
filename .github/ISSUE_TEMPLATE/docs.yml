@@ -1,0 +1,22 @@
+name: ドキュメントの誤り / Docs error
+description: 説明の誤り・わかりにくいところ・コード例の問題 / Mistakes, unclear explanations, or broken code examples
+labels: [documentation]
+body:
+  - type: input
+    id: url
+    attributes:
+      label: ページの URL / Page URL
+      placeholder: https://emojicode-ide.com/docs/basics/strings/
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: どこが問題か / What is wrong
+      description: 該当する文やコード例を引用してもらえると助かります / Quoting the sentence or code example helps
+    validations:
+      required: true
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: どう直すとよいか（任意） / Suggested fix (optional)
