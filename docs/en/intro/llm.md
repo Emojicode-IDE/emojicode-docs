@@ -1,6 +1,6 @@
 # Docs for LLMs
 
-This documentation is also available in a form that is easy for LLMs (large language models) to read. Having an LLM read it before you ask about Emojicode or have it write code can help make its answers more accurate.
+This documentation is also available in a form that is easy for large language models to read. Having an LLM read it before you ask about Emojicode or have it write code can help make its answers more accurate.
 
 ## What to give it
 
