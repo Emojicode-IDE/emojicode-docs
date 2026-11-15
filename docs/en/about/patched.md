@@ -4,6 +4,8 @@ These are bugs in the official Emojicode compiler ([`master`](https://github.com
 
 Bugs that are not fixed are listed in [Emojicode Language Bugs](known-issues.md). You can see the whole patch in [emojicode-wasm32.patch](/docs/patches/emojicode-wasm32.patch.txt).
 
+::: cards
+
 ## `🔧` breaks Japanese text or emoji at the end of a string
 
 In the official compiler, `🔧` (remove surrounding whitespace) breaks the last character of a string when that character is Japanese or an emoji. This happens in every environment.
@@ -277,6 +279,8 @@ split
 empty string
 infinite loop
 ```
+
+:::
 
 ## Changes for running on WebAssembly
 

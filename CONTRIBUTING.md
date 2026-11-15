@@ -24,6 +24,21 @@ Thank you! Every pull request is welcome, from typo fixes to translations.
 | ` ```copyfile パス ` | そのファイルの中身をコピーするボタン（中身はボタンの文字）/ A button that copies the file's contents (the block's content is the button label) |
 | ` ```keywords ` | 表示しない検索用の言い換え（1 行に 1 つ）/ Hidden search synonyms (one per line) |
 
+`::: cards` の行と `:::` の行で囲んだ範囲は、h2 の節ごとにカードとして並びます。カードには見出しと最初の段落が出て、押すとその節の全体が右から出てきます。節が多くて長いページ（[修正済みのバグ](docs/about/patched.md) など）で使います。
+Lines between `::: cards` and `:::` are shown as cards, one per h2 section. Each card shows the heading and the first paragraph, and tapping it slides the whole section in from the right. Use it on long pages with many sections (such as [Fixed Bugs](docs/en/about/patched.md)).
+
+```markdown
+::: cards
+
+## 見出し / Heading
+
+最初の段落はカードにも出る。/ The first paragraph also appears on the card.
+
+## 次の見出し / Next heading
+
+:::
+```
+
 コード例の出力は、[IDE](https://emojicode-ide.com/) で実行して確かめられます。
 You can check the output of a code example by running it in the [IDE](https://emojicode-ide.com/).
 

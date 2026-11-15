@@ -4,6 +4,8 @@ Emojicode の公式コンパイラ（[`master`](https://github.com/emojicode/emo
 
 修正されていないバグは [Emojicode言語のバグ](known-issues.md) にあります。修正パッチの全体は [emojicode-wasm32.patch](/docs/patches/emojicode-wasm32.patch.txt) で見られます。
 
+::: cards
+
 ## `🔧` で、文字列の最後の日本語や絵文字が壊れる
 
 公式コンパイラでは、`🔧`（前後の空白を取り除く）で、文字列の最後の文字が日本語や絵文字だと、その文字が壊れます。どの環境でも起きます。
@@ -273,6 +275,8 @@ split
 空文字列
 無限ループ
 ```
+
+:::
 
 ## WebAssembly で動かすための変更
 
