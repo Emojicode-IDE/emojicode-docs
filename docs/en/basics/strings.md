@@ -10,16 +10,31 @@ Inside a string, whatever you put between `🧲` and `🧲` is replaced by the v
 🏁 🍇
   🔤Emoji🔤 ➡️ name
   😀 🔤Hello, 🧲name🧲!🔤❗️
-  😀 🔤1 ➕ 2 is 🧲🔡 1 ➕ 2❗️🧲🔤❗️
+  😀 🔤1 ➕ 2 is 🧲1 ➕ 2🧲🔤❗️
+  😀 🔤Half is 🧲1.5🧲🔤❗️
 🍉
 ```
 
 ```output
 Hello, Emoji!
 1 ➕ 2 is 3
+Half is 1.500000
 ```
 
-Only strings can go inside `🧲`. To put a number in, turn it into a string with `🔡 … ❗️`.
+What goes inside `🧲` must be a value of a type that can be turned into a string. Strings, integers, and real numbers work, but Booleans, lists, and optionals can't go in as they are. Real numbers are shown with 6 decimal places, so if you want to choose the number of digits, turn the number into a string first with `🔡 real digits❗️` from “Converting to and from numbers” below.
+
+```emojicode error
+🏁 🍇
+  🔢 🔤12🔤 10❗️ ➡️ n
+  😀 🔤n is 🧲n🧲🔤❗️
+🍉
+```
+
+```text
+is not compatible to
+```
+
+Unwrap an optional before putting it in ([Optionals](optionals.md)). Your own types can go inside `🧲` too, if they provide `❗️ 🔡 ➡️ 🔡` and conform to the protocol `↘️🔸🔡` ([Protocols](../types/protocols.md)).
 
 ```keywords
 string concatenation

@@ -112,6 +112,35 @@ When a closure is used for longer than the place where it was made, for example 
 15
 ```
 
+The same goes for storing a closure in an instance variable: create the closure you pass with `🍇🎍🥡`. You can call the stored closure later with `⁉️`.
+
+```emojicode
+🐇 🔔 🍇
+  🖍🆕 onRing 🍇🍉
+
+  🆕 callback 🍇🍉 🍇
+    callback ➡️ 🖍onRing
+  🍉
+
+  ❗️ 🛎 🍇
+    ⁉️ onRing❗️
+  🍉
+🍉
+
+🏁 🍇
+  🆕🔔 🍇🎍🥡
+    😀 🔤Ding🔤❗️
+  🍉❗️ ➡️ bell
+  🛎 bell❗️
+  🛎 bell❗️
+🍉
+```
+
+```output
+Ding
+Ding
+```
+
 If you forget `🎍🥡` and try to let the closure escape, you get a compile error.
 
 ```emojicode error
