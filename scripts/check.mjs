@@ -11,7 +11,7 @@ import path from 'node:path';
 
 const root = path.resolve(import.meta.dirname, '..');
 const docs = path.join(root, 'docs');
-const FENCES = new Set(['emojicode', 'output', 'stdin', 'official', 'text', 'cpp', 'keywords', 'patch', '']);
+const FENCES = new Set(['emojicode', 'output', 'stdin', 'official', 'text', 'cpp', 'copy', 'copyfile', 'keywords', 'patch', '']);
 const MODES = new Set(['', 'error', 'norun']);
 const errors = [];
 const err = (where, msg) => errors.push(`${where}: ${msg}`);

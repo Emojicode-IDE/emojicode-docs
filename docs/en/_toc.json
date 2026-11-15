@@ -3,7 +3,8 @@
     "title": "Getting started",
     "pages": [
       "index",
-      "intro/hello"
+      "intro/hello",
+      "intro/llm"
     ]
   },
   {

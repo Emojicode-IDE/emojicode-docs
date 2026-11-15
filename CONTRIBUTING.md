@@ -20,6 +20,8 @@ Thank you! Every pull request is welcome, from typo fixes to translations.
 | ` ```emojicode norun ` | 断片（実行しない）/ A fragment (not run) |
 | ` ```official ` | 公式コンパイラでの実行結果（固定）/ Output of the official compiler (fixed) |
 | ` ```cpp ` | C++ での書き方 / The C++ equivalent |
+| ` ```copy 見出し ` | コピーのボタンつきの枠（URL やプロンプトなど）/ A box with a copy button (URLs, prompts, etc.) |
+| ` ```copyfile パス ` | そのファイルの中身をコピーするボタン（中身はボタンの文字）/ A button that copies the file's contents (the block's content is the button label) |
 | ` ```keywords ` | 表示しない検索用の言い換え（1 行に 1 つ）/ Hidden search synonyms (one per line) |
 
 コード例の出力は、[IDE](https://emojicode-ide.com/) で実行して確かめられます。

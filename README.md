@@ -4,8 +4,8 @@
 
 The manuscripts of the [Emojicode IDE](https://emojicode-ide.com/) documentation (an unofficial reference) and the UI translations. Bug reports and requests for the IDE or the docs are also welcome in [Issues](https://github.com/Emojicode-IDE/emojicode-docs/issues/new/choose).
 
-> このプロジェクトは [Emojicode](https://www.emojicode.org/) の開発元とは関係のない、非公式のものです。
-> This project is unofficial and not affiliated with the developers of [Emojicode](https://www.emojicode.org/).
+> このプロジェクトは [Emojicode](https://www.emojicode.org/) の開発元とは関係のない、非公式のものです。言語仕様は公式の [Language Reference](https://www.emojicode.org/docs/reference) にまとまっていて、このドキュメントはそれを補う、動かしながら学ぶための資料です。
+> This project is unofficial and not affiliated with the developers of [Emojicode](https://www.emojicode.org/). The language is fully documented in the official [Language Reference](https://www.emojicode.org/docs/reference); these docs are a companion for learning by running code.
 
 ## 中身 / Contents
 
