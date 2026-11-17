@@ -27,7 +27,7 @@ Types such as `🔢` `🔡` `🍨` are not keywords; they are types defined in t
 | `🆕` | Create something new (variable, instance, initializer) | [Values and Variables](../basics/values.md) |
 | `⬅️` | Compound assignment (such as `⬅️➕`), initial value of an instance variable | [Values and Variables](../basics/values.md) |
 | `👍` `👎` | True and false | [Values and Variables](../basics/values.md) |
-| `🤷‍♀️` | No value | [Optionals](../basics/optionals.md) |
+| `🤷‍♀️` | No value (`🤷‍♂️` and `🤷` mean the same) | [Optionals](../basics/optionals.md) |
 | `🔤` | String | [Strings](../basics/strings.md) |
 | `🧲` | Interpolate a value into a string | [Strings](../basics/strings.md) |
 | `❌` | Escape inside a string (such as `❌n`) | [Strings](../basics/strings.md) |
@@ -60,6 +60,7 @@ Types such as `🔢` `🔡` `🍨` are not keywords; they are types defined in t
 | `🔂` | Go through a range or list in order (for) | [Loops](../basics/loops.md) |
 | `🔁` | While a condition holds (while) | [Loops](../basics/loops.md) |
 | `↩️` | Return a value (return). To return from a method that doesn't return a value, `↩️↩️` | [Classes](../types/classes.md) |
+| `🎍🐌` `🎍🏎` | Tell the compiler a branch is unlikely or likely (behavior does not change) | [Conditionals](../basics/control.md) |
 
 ## Defining types
 
@@ -67,7 +68,7 @@ Types such as `🔢` `🔡` `🍨` are not keywords; they are types defined in t
 |---|---|---|
 | `🐇` | Class, type method (`🐇❗️`), using a type as a value | [Classes](../types/classes.md) |
 | `🕊` | Value type | [Value Types and Enumerations](../types/valuetypes.md) |
-| `🔘` | Enumeration | [Value Types and Enumerations](../types/valuetypes.md) |
+| `🔘` | Enumeration; using an enumeration as a value (`🔘enumeration`) | [Value Types and Enumerations](../types/valuetypes.md) |
 | `🐊` | Protocol, conforming to a protocol | [Protocols](../types/protocols.md) |
 | `🐚` | Generic type arguments | [Generics](../types/generics.md) |
 | `🍼` | Store an argument directly in an instance variable | [Classes](../types/classes.md) |
@@ -130,7 +131,7 @@ Types such as `🔢` `🔡` `🍨` are not keywords; they are types defined in t
 |---|---|---|
 | `🏮` | Whether you hold the only reference to that instance | [Memory and References](../advanced/memory.md) |
 | `☣️` | Block for writing unsafe code (unsafe) | [Miscellaneous Syntax](../advanced/misc.md) |
-| `🎍` | Attribute attached to a declaration (`🎍🥡` `🎍🛢`) | [Closures](../types/closures.md) |
+| `🎍` | Attribute (`🎍🥡` `🎍🛢` on declarations, `🎍🐌` `🎍🏎` after a condition) | [Closures](../types/closures.md), [Conditionals](../basics/control.md) |
 | `🥯` | Inline | [Miscellaneous Syntax](../advanced/misc.md) |
 | `🛢` | Skip generating per-type code for generics (`🎍🛢`) | [Miscellaneous Syntax](../advanced/misc.md) |
 | `⚠️` | Deprecated (warns when used) | [Miscellaneous Syntax](../advanced/misc.md) |
@@ -154,7 +155,15 @@ These are not keywords, but they are commonly used types.
 | `📶` | Weak reference | [Memory and References](../advanced/memory.md) |
 | `🍡` `🔂` | Iterator, and the protocol for types you can loop over | [Iterating Your Own Types with 🔂](../types/iteration.md) |
 | `🚧` | Error with a message | [Error Handling](../types/errors.md) |
-| `🧵` | Thread (in this IDE, it just runs immediately) | |
+| `🔠` | Builds a string (string builder) | [Strings](../basics/strings.md) |
+| `🌱` | Iterator over a list | [Lists and Dictionaries](../basics/collections.md) |
+| `🍦` | Class for passing a list by reference | [Lists and Dictionaries](../basics/collections.md) |
+| `😛` | Protocol for types that can be compared for equality with `🙌` | [Protocols](../types/protocols.md) |
+| `🎰` | Random numbers | [Bitwise Operations and Numbers](../advanced/numbers.md) |
+| `🧠` | Memory area (used in unsafe code) | [Miscellaneous Syntax](../advanced/misc.md) |
+| `💻` | Command-line arguments, environment variables, exiting, and more | [System and Threads](../advanced/system.md) |
+| `🧵` | Thread (in this IDE, it just runs immediately) | [System and Threads](../advanced/system.md) |
+| `🔐` | Mutex (not the `🔐` access level) | [System and Threads](../advanced/system.md) |
 
 ```keywords
 keyword

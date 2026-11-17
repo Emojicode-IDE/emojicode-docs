@@ -143,3 +143,62 @@ The condition of `↪️` must be a Boolean (`👌`). Writing a number or a stri
   🍉
 🍉
 ```
+
+## Hinting how likely a branch is (🎍🐌 and 🎍🏎)
+
+Writing `🎍🐌` after the condition of `↪️` or `🙅↪️`, just before `🍇`, tells the compiler that the condition rarely holds; writing `🎍🏎` tells it that the condition usually holds. You can also write them when unwrapping an optional with `↪️ … ➡️ name`.
+
+```emojicode
+🏁 🍇
+  🍿 3 0 7 🍆 ➡️ list
+  🔂 n list 🍇
+    ↪️ n 🙌 0 🎍🐌 🍇
+      😀 🔤zero🔤❗️
+    🍉
+    🙅↪️ n ▶️ 5 🎍🏎 🍇
+      😀 🔤large🔤❗️
+    🍉
+    🙅 🍇
+      😀 🔤small🔤❗️
+    🍉
+  🍉
+  ↪️ 🔢 🔤12🔤 10❗️ ➡️ m 🎍🏎 🍇
+    😀 🔡 m❗️❗️
+  🍉
+🍉
+```
+
+```output
+small
+zero
+large
+12
+```
+
+The result is the same as without the hint. The compiler only passes it on as LLVM branch weights (1 to 99 for the taken side with `🎍🐌`, 99 to 1 with `🎍🏎`) when generating machine code, which may change how the code is laid out so that the frequently taken side runs faster. In the standard library, `🎍🐌` is attached to the `↪️` checks for out-of-range list indices and insufficient capacity.
+
+You can only write them after the condition of `↪️` and `🙅↪️`. Writing them after `🙅` or `🔁` causes the error `Expected BlockBegin but instead found Decorator(🐌).` Only `🐌` and `🏎` can follow `🎍`; any other emoji causes the same error.
+
+```emojicode error
+🏁 🍇
+  1 ➡️ n
+  🔁 n ◀️ 3 🎍🐌 🍇
+    😀 🔤x🔤❗️
+  🍉
+🍉
+```
+
+```text
+Expected BlockBegin but instead found Decorator(🐌).
+```
+
+```keywords
+likely
+unlikely
+__builtin_expect
+[[likely]]
+[[unlikely]]
+branch prediction
+branch weights
+optimization hint
+```

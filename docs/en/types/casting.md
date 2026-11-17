@@ -66,7 +66,7 @@ downcast
 
 ## Using types as values
 
-The name of a class, value type, or enumeration can be used directly as a value. The `🐇Type` you write when calling a type method ([Classes](classes.md)) is exactly that.
+The name of a class, value type, or enumeration can be used as a value by putting a marker in front of it. The `🐇Type` you write when calling a type method ([Classes](classes.md)) is exactly that.
 
 ```emojicode
 🐇 🌷 🍇
@@ -94,11 +94,84 @@ Rose
 
 Type methods can also be overridden in a subclass with `✒️`.
 
+The marker depends on the kind of type, and using a different one causes a compile error.
+
+| Syntax | Kind of type |
+|---|---|
+| `🐇Type` | class |
+| `🕊Type` | value type |
+| `🔘Type` | enumeration |
+| `🐊Type` | protocol |
+
+```emojicode
+🕊 📐 🍇
+  🐇❗️ 🏷 ➡️ 🔡 🍇
+    ↩️ 🔤value type🔤
+  🍉
+🍉
+
+🔘 🚦 🍇
+  🆕▶️🔴
+  🆕▶️🍏
+  🐇❗️ 🏷 ➡️ 🔡 🍇
+    ↩️ 🔤enumeration🔤
+  🍉
+🍉
+
+🏁 🍇
+  😀 🏷🕊📐❗️❗️
+  😀 🏷🔘🚦❗️❗️
+🍉
+```
+
+```output
+value type
+enumeration
+```
+
+The marker for an enumeration is `🔘`, the same emoji used to define one. However, when the compiler prints the type of a type value, for example in an error message, the marker for an enumeration becomes `🦃` (classes get `🐇`, value types `🕊`, and protocols `🐊`, the same as when you write them). `🦃` only appears in messages; you cannot write it in a program. If you write `🦃🚦`, `🦃` is not read as a marker, and you get an unrelated error such as `Unexpected token RightProductionOperator.`
+
+```emojicode error
+🔘 🚦 🍇
+  🆕▶️🔴
+🍉
+
+🏁 🍇
+  🖍🆕 n 🔢
+  🔘🚦 ➡️ 🖍n
+🍉
+```
+
+```text
+🦃_🚦 is not compatible to s🔢.
+```
+
+When you use the wrong marker, the error tells you the right one.
+
+```emojicode error
+🔘 🚦 🍇
+  🆕▶️🔴
+🍉
+
+🏁 🍇
+  🐇🚦 ➡️ t
+🍉
+```
+
+```text
+Enumeration type must be prefixed with 🔘: 🔘🚦
+```
+
+`🐊Type` is in the compiler's list of markers, but as far as we tried, writing `🐊Protocol` as a value inside a method causes the error `Unexpected type.`, and we found no situation where it works. Writing it as an argument type gives the same error. The only uses in the official tests are cases that write it as an argument type and check that it fails (`tests/reject/typeAsValueIncompatibleClToProtocol.emojic` and others), and the standard library does not use it.
+
 ```keywords
 type
 class object
 metaclass
 typeid
+🔘
+🦃
+type value marker
 ```
 
 ## Creating instances from a type value (⬛️)

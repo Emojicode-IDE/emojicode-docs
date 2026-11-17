@@ -154,12 +154,149 @@ With `🆕 ▶️name`, you can create a named initializer. This is handy when t
 If you create a method named `🔡`, like `❗️ 🔡 ➡️ 🔡`, you can turn a value into a string with `🔡 value❗️`.
 
 ```keywords
-overload
 multiple constructors
 named constructor
 factory
 toString
 to_string
+```
+
+## Methods with the same name and different arguments
+
+As long as the argument types or counts differ, you can create several methods or initializers with the same name (overloading). When you call one, the compiler decides which to use based on the values you pass.
+
+```emojicode
+🐇 🖨 🍇
+  🆕 🍇🍉
+
+  🆕 n 🔢 🍇
+    😀 🔤Made from a number🔤❗️
+  🍉
+
+  🆕 s 🔡 🍇
+    😀 🔤Made from a string🔤❗️
+  🍉
+
+  ❗️ 📄 n 🔢 🍇
+    😀 🔤Number: 🧲🔡 n❗️🧲🔤❗️
+  🍉
+
+  ❗️ 📄 s 🔡 🍇
+    😀 🔤String: 🧲s🧲🔤❗️
+  🍉
+
+  ❗️ 📄 s 🔡 n 🔢 🍇
+    😀 🔤String and number: 🧲s🧲 🧲🔡 n❗️🧲🔤❗️
+  🍉
+🍉
+
+🏁 🍇
+  🆕🖨 1❗️
+  🆕🖨 🔤x🔤❗️
+  🆕🖨❗️ ➡️ p
+  📄 p 3❗️
+  📄 p 🔤x🔤❗️
+  📄 p 🔤x🔤 3❗️
+🍉
+```
+
+```output
+Made from a number
+Made from a string
+Number: 3
+String: x
+String and number: x 3
+```
+
+What tells them apart is the name, whether it is `❗️` or `❓`, the number of arguments, and the argument types. Methods that differ only in their return type are not told apart. Even if you write two methods whose argument types are exactly the same, you don't get a compile error; the one written later is silently used when you call it ([Emojicode Language Bugs](../about/known-issues.md)).
+
+### Which one is called
+
+The compiler first collects the methods whose name and argument count match and whose arguments can all accept the values you pass. If there is only one, it calls that one. If there are two or more, it picks the one with narrower argument types (but the rule about generics on a single method, explained below, applies first). If `🐕` inherits from `🐾`, `🐕` is the narrower one, and `⚪️` is wider than any type.
+
+```emojicode
+🐇 🐾 🍇
+  🆕 🍇🍉
+🍉
+
+🐇 🐕 🐾 🍇
+🍉
+
+🐇 🔎 🍇
+  🆕 🍇🍉
+
+  ❗️ 📄 a ⚪️ 🍇
+    😀 🔤anything🔤❗️
+  🍉
+
+  ❗️ 📄 a 🐾 🍇
+    😀 🔤animal🔤❗️
+  🍉
+
+  ❗️ 📄 a 🐕 🍇
+    😀 🔤dog🔤❗️
+  🍉
+🍉
+
+🏁 🍇
+  🆕🔎❗️ ➡️ f
+  📄 f 1❗️
+  📄 f 🆕🐾❗️❗️
+  📄 f 🆕🐕❗️❗️
+  🖍🆕 pet 🐾
+  🆕🐕❗️ ➡️ 🖍pet
+  📄 f pet❗️
+🍉
+```
+
+```output
+anything
+animal
+dog
+animal
+```
+
+The last `pet` holds a `🐕`, but the choice is made at compile time, so it is decided by the variable's type, `🐾`.
+
+When there are two or more arguments, the compiler compares the candidates two at a time and counts, argument by argument, whether this one's type fits into the other's. The one for which this holds for more than half of the arguments is considered narrower. However, if the candidates mix methods that use [generics on a single method](../advanced/classes.md) with ones that don't, and only one of them doesn't, that one is chosen before argument types are compared, even if its argument types are wider.
+
+If neither can be called narrower, you get the compile error `Ambiguous call to`. In the following example, `🔢` fits into `🍬🔢` but not the other way round, so each of the two candidates is narrower in only one of its two arguments, and the compiler can't decide.
+
+```emojicode error
+🐇 🖨 🍇
+  🆕 🍇🍉
+
+  ❗️ 📄 a 🔢 b 🍬🔢 🍇
+    😀 🔤first🔤❗️
+  🍉
+
+  ❗️ 📄 a 🍬🔢 b 🔢 🍇
+    😀 🔤second🔤❗️
+  🍉
+🍉
+
+🏁 🍇
+  🆕🖨❗️ ➡️ p
+  📄 p 1 2❗️
+🍉
+```
+
+```text
+Ambiguous call to 📄.
+```
+
+When none of them fits, the error is `has no suitable`, with a note for each candidate saying which argument didn't match.
+
+```keywords
+overload
+overloading
+overload resolution
+method overloading
+function overloading
+same method name
+Ambiguous call
+ambiguous overload
+has no suitable
 ```
 
 ## This instance (👇)

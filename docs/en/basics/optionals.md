@@ -35,6 +35,46 @@ no value
 Maybe
 ```
 
+### 🤷‍♂️ and 🤷 work too
+
+No value can also be written as `🤷‍♂️`, or as the gender-neutral `🤷`. They all mean exactly the same as `🤷‍♀️`. During lexing, the compiler treats any emoji starting with `🤷` as “no value” and ignores whatever follows it, such as a ZWJ, ♂ or ♀, or a skin tone modifier. The standard library also uses `🤷‍♂️`.
+
+```emojicode
+🏁 🍇
+  🖍🆕 a 🍬🔢
+  🤷 ➡️ 🖍a
+  ↪️ a 🙌 🤷‍♂️ 🍇
+    😀 🔤same as 🤷‍♂️🔤❗️
+  🍉
+  ↪️ a 🙌 🤷‍♀️ 🍇
+    😀 🔤same as 🤷‍♀️🔤❗️
+  🍉
+🍉
+```
+
+```output
+same as 🤷‍♂️
+same as 🤷‍♀️
+```
+
+Whichever form you use, it can only appear where an optional is expected. Assigning it directly to a variable whose type is unknown causes the error `🤷‍ can only be used when an optional is expected.`
+
+```emojicode error
+🏁 🍇
+  🤷 ➡️ x
+🍉
+```
+
+```text
+can only be used when an optional is expected.
+```
+
+```keywords
+🤷‍♂️
+🤷
+shrug
+```
+
 ## Unwrapping (↪️ … ➡️)
 
 You cannot use an optional in calculations as it is. If you write `↪️ optional ➡️ name 🍇 … 🍉`, the block runs only when there is a value, with the value given that name.

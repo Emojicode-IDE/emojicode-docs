@@ -68,7 +68,7 @@ This compares `🔲 thing 🔢` (the result of casting `⚪️` to `🔢`; no va
 
 The patch does not create the value on the `🤷‍♀️` side (it is not needed in the first place).
 
-```patch Compiler/AST/ASTBinaryOperator_CG.cpp
+```patch Compiler/AST/ASTBinaryOperator_CG.cpp IsNoValue
 ```
 
 ```keywords
@@ -83,7 +83,7 @@ crash
 
 In the official compiler, `✏️` (write to a file) in the `files` package is declared as a method that may throw an error, but its implementation (in C++) has no parameter for receiving the error. Because of this, a failed write does not raise an error. On WebAssembly, a mismatched number of arguments stops the program right there, so writing does not work at all. The patch adds the parameter and throws an error when the write fails.
 
-```patch files/File.cpp
+```patch files/File.cpp filesFileWrite
 ```
 
 ```keywords
@@ -192,7 +192,7 @@ Copying a list does not duplicate its contents right away; they are duplicated t
 
 The patch duplicates the outer list first whenever an element returned with `✴️` is mutated (the list's `📝` does the duplication).
 
-```patch Compiler/AST/ASTMethod.cpp
+```patch Compiler/AST/ASTMethod.cpp mutateReference
 ```
 
 ```patch Compiler/AST/ASTMethod_CG.cpp
@@ -234,7 +234,10 @@ The sign is removed before the digits are produced, but negating the smallest va
 
 The official compiler's digit table is also missing `w`, so with a base above 32, digits of 32 or more come out shifted. For example, `🔡 32 33❗️` gives `x` instead of `w`, and `🔡 35 36❗️` gives `0` instead of `z`. The patch fixes the table as well.
 
-```patch s/Integer.cpp
+```patch s/Integer.cpp std::abs(n)
+```
+
+```patch s/Integer.cpp uvwxyz
 ```
 
 ```keywords
@@ -271,13 +274,667 @@ abc
 
 An empty string is “found” at every position, so the position where the next search starts never moves forward. With the patch, an empty separator returns a list that holds only the original string. To take a string apart one character at a time, loop over it with `🔂` ([Strings](../basics/strings.md)).
 
-```patch s/🔡.🍇
+```patch s/🔡.🍇 🔫
 ```
 
 ```keywords
 split
 empty string
 infinite loop
+```
+
+## `🔐` does not return whether the mutex was locked
+
+In the official compiler, `🔐` (try to lock a mutex) does not return whether the lock succeeded.
+
+```emojicode
+🏁 🍇
+  🆕🔐❗️ ➡️ lock
+  ↪️ 🔐 lock❗️ 🍇
+    😀 🔤Locked🔤❗️
+    🔓 lock❗️
+  🍉
+🍉
+```
+
+```output Result in this IDE
+Locked
+```
+
+```official
+RuntimeError: unreachable
+```
+
+`🔐` is declared as a method that returns `👌`, but the C++ function behind it tries to lock and then returns nothing. In WebAssembly, calling a function whose return type does not match stops the program on the spot (the result above is from WebAssembly without the patch). On x86-64 the result of the lock attempt might happen to end up as the return value (we have not checked), but nothing guarantees it. With the patch, it returns whether the lock succeeded.
+
+```patch s/Thread.cpp
+```
+
+```keywords
+mutex
+try_lock
+lock
+```
+
+## `📒` returns tan instead of arctan
+
+In the official compiler, `📒` (arctan) returns tan. This happens in every environment.
+
+```emojicode
+🏁 🍇
+  😀 🔡 📒 1.0❗️ 6❗️❗️
+🍉
+```
+
+```output Result in this IDE
+0.785398
+```
+
+```official
+1.557407
+```
+
+arctan 1 is π/4, so the result should be 0.785398, but the official compiler gives tan 1, which is 1.557407. The C++ function behind it calls `std::tan` instead of `std::atan`. The patch calls `std::atan` ([Bitwise Operations and Numbers](../advanced/numbers.md)).
+
+```patch s/Real.cpp
+```
+
+```keywords
+arctan
+atan
+std::atan
+inverse tangent
+inverse trigonometric functions
+```
+
+## Comparing with NaN makes `🙌`, `◀️`, and `▶️` all `👍`
+
+In the official compiler, when one side of a real number comparison (`🙌`, `◀️`, `▶️`, `◀️🙌`, `▶️🙌`) is NaN (a value that is not a number, such as `0.0 ➗ 0.0`), every comparison is `👍`. `nan 🙌 nan`, `nan ◀️ 1.0`, and `nan ▶️🙌 1.0` all hold. This happens in every environment.
+
+```emojicode
+🏁 🍇
+  0.0 ➗ 0.0 ➡️ nan
+  ↪️ nan 🙌 nan 🍇
+    😀 🔤nan 🙌 nan🔤❗️
+  🍉
+  ↪️ nan ◀️ 1.0 🍇
+    😀 🔤nan ◀️ 1.0🔤❗️
+  🍉
+  ↪️ nan ▶️🙌 1.0 🍇
+    😀 🔤nan ▶️🙌 1.0🔤❗️
+  🍉
+  😀 🔤Done🔤❗️
+🍉
+```
+
+```output Result in this IDE
+Done
+```
+
+```official
+nan 🙌 nan
+nan ◀️ 1.0
+nan ▶️🙌 1.0
+Done
+```
+
+The official compiler compares real numbers with the kind of comparison instruction that holds whenever NaN is involved (LLVM's `fcmp` with `ueq`, `ult`, and so on). The patch uses the kind that does not hold when NaN is involved (`oeq`, `olt`, and so on). As in C and C++, every comparison involving NaN is `👎`.
+
+```patch Compiler/AST/ASTBinaryOperator_CG.cpp CreateFCmpOLT
+```
+
+```keywords
+NaN
+not a number
+real number comparison
+floating-point comparison
+fcmp
+unordered
+```
+
+## Converting infinity or a very large real number to a string breaks it
+
+In the official compiler, converting infinity, NaN, or a real number too large to fit in `🔢` to a string with `🔡` does not give a correct string.
+
+```emojicode
+🏁 🍇
+  1.0 ➗ 0.0 ➡️ infinity
+  😀 🔡 infinity❗️❗️
+  😀 🔡 🔋 infinity❗️ 2❗️❗️
+  😀 🔡 100000000000000000000.0 1❗️❗️
+🍉
+```
+
+```output Result in this IDE
+inf
+-inf
+100000000000000000000.0
+```
+
+```official
+9223372036854775807.000000
+-9223372036854775808.00
+9223372036854775807.0
+```
+
+When it converts a real number to a string, the official compiler first converts the integer part to a C++ `long long` and then produces the digits. Converting a value that does not fit in `long long` is undefined behavior, and on WebAssembly it becomes the value at the edge of the range (the result above is from WebAssembly without the patch). The patch converts such values with C's `snprintf`. Infinity becomes `inf` and `-inf`, and NaN becomes `nan` (or `-nan`) ([Strings](../basics/strings.md)).
+
+The bug that truncates everything below the given digit is not fixed ([Emojicode Language Bugs](known-issues.md)).
+
+```patch s/Integer.cpp isfinite
+```
+
+```keywords
+real number to string
+infinity
+inf
+NaN
+long long
+```
+
+## String `↔️` does not always return -1, 0, or 1
+
+In the official compiler, string `↔️` (compare order) returns whatever C's `memcmp` returned, not -1, 0, or 1. The standard library's documentation comment says it returns -1, 0, or 1.
+
+```emojicode
+🏁 🍇
+  😀 🔡 ↔️ 🔤abc🔤 🔤abz🔤❗️❗️❗️
+  😀 🔡 ↔️ 🔤abz🔤 🔤abc🔤❗️❗️❗️
+  😀 🔡 ↔️ 🔤abc🔤 🔤abc🔤❗️❗️❗️
+🍉
+```
+
+```output Result in this IDE
+-1
+1
+0
+```
+
+```official
+-23
+23
+0
+```
+
+If the byte counts differ, `↔️` returns -1 or 1 right away, but if they are the same, it returns the result of `🧠`'s `↔️` (C's `memcmp`) on the contents as is. `memcmp` only guarantees the sign of its result, and on WebAssembly it is the difference of the first differing bytes (-23 for `c` and `z`) (the result above is from WebAssembly without the patch). The patch returns -1, 0, or 1 according to the sign. The order itself is unchanged ([Strings](../basics/strings.md)).
+
+```patch s/🔡.🍇 ↔️
+```
+
+```keywords
+compare
+memcmp
+string comparison
+order
+```
+
+## `🐻🔸🔣` of `🔠` accepts surrogates
+
+In the official compiler, passing a surrogate (`0xD800` to `0xDFFF`) to `🐻🔸🔣` (append the character of a code point) of `🔠` (build a string) returns `👍` and appends it. Surrogates cannot be represented in UTF-8, so the string becomes invalid UTF-8. This happens in every environment.
+
+```emojicode
+🏁 🍇
+  🆕🔠❗️ ➡️ builder
+  ☣️ 🍇
+    ↪️ 🐻🔸🔣 builder 0xD800❗️ 🍇
+      😀 🔤Appended🔤❗️
+    🍉
+    🙅 🍇
+      😀 🔤Rejected🔤❗️
+    🍉
+  🍉
+🍉
+```
+
+```output Result in this IDE
+Rejected
+```
+
+```official
+Appended
+```
+
+`🐻🔸🔣` is meant to return `👎` when the code point is not valid, but the official compiler rejects only negative numbers and numbers of 0x110000 or more, without checking for surrogates (0xD800–0xDFFF). The patch returns `👎` for surrogates too ([Strings](../basics/strings.md)).
+
+```patch s/🔡.🍇 0xD800
+```
+
+```keywords
+surrogate
+code point
+UTF-8
+```
+
+## `🔚` in `📦 files` moves to the third byte instead of the end
+
+In the official compiler, `🔚` (move to the end of the file) in the `files` package moves 2 bytes from the start (to the third byte). This happens in every environment.
+
+```emojicode
+📦 files 🏠
+
+🏁 🍇
+  🍺 🆕📄▶️📝 🔤a.txt🔤❗️ ➡️ out
+  🍺 ✏️ out 📇 🔤abcdef🔤❗️❗️
+  🔚 out❗️
+  🍺 ✏️ out 📇 🔤Z🔤❗️❗️
+  🚪 out❗️
+  😀 🍺 🔡 🍺📇🐇📄 🔤a.txt🔤❗️❗️❗️
+🍉
+```
+
+```output Result in this IDE
+abcdefZ
+```
+
+```official
+abZdef
+```
+
+The C++ function behind it calls `seekp(std::ios_base::end)`, so the constant `end` (meaning “from the end,” value 2) is used as a position. The patch calls `seekp(0, std::ios_base::end)` ([Packages and Documentation Comments](../advanced/packages.md)).
+
+```patch files/File.cpp seekp
+```
+
+```keywords
+files
+file
+seek
+seekp
+move to end
+append
+```
+
+## `📦 json` drops zeros right after the decimal point and breaks large numbers
+
+In the official compiler, when the `json` package reads a real number, zeros right after the decimal point are ignored, so `0.05` becomes 0.5 and `1.05` becomes 1.5. Integers that do not fit in `🔢`, and numbers with 19 or more digits after the decimal point, are not read correctly either. This happens in every environment.
+
+```emojicode
+📦 json 🏠
+
+🏁 🍇
+  🔂 text 🍿 🔤0.05🔤 🔤1.05🔤 🔤18446744073709551616.5🔤 🔤18446744073709551616🔤 🔤0.12345678901234567890123🔤 🍆 🍇
+    🍺 ⚪️🕊🌸 text❗️ ➡️ value
+    ↪️ 🔲 value 💯 ➡️ r 🍇
+      😀 🔤🧲text🧲 → 🧲🔡 r 2❗️🧲🔤❗️
+    🍉
+    🙅↪️ 🔲 value 🔢 ➡️ n 🍇
+      😀 🔤🧲text🧲 → 🔢 🧲🔡 n 10❗️🧲🔤❗️
+    🍉
+  🍉
+🍉
+```
+
+```output Result in this IDE
+0.05 → 0.05
+1.05 → 1.05
+18446744073709551616.5 → 18446744073709551616.00
+18446744073709551616 → 18446744073709551616.00
+0.12345678901234567890123 → 0.12
+```
+
+```official
+0.05 → 0.50
+1.05 → 1.50
+18446744073709551616.5 → 0.50
+18446744073709551616 → 🔢 0
+0.12345678901234567890123 → 0.48
+```
+
+The official compiler reads the digits after the decimal point as an integer (5 for `05`) and divides by a power of ten based on how many digits that integer has. Because it uses the number of digits of the value rather than the number of digits it read, leading zeros are lost. If only `0` follows the decimal point, as in `1.0`, it divides 0 by 0 and the result is NaN. The patch divides by the number of digits it read.
+
+The official compiler also reads the integer part as `🔢` before turning it into a real number, so an integer part that does not fit in `🔢` overflows (`18446744073709551616` is 2^64, so it becomes 0). The digits after the decimal point are also read as `🔢`, so 19 or more of them overflow. The patch still uses `🔢` when the digits fit in it; when they do not, it reads them 18 digits at a time as `🔢` and combines them into a real number. An integer that does not fit in `🔢` is returned as `💯` instead of `🔢` ([Packages and Documentation Comments](../advanced/packages.md)).
+
+The upstream test `jsonTest` includes a test that reads `18446744073709551616.0`, but it happens to pass with the official compiler too. The `.0` part produces NaN, and because of the NaN comparison bug above, it is judged “equal” to the expected value.
+
+```patch json/json.🍇 digitsStart
+```
+
+```patch json/json.🍇 chunkStart
+```
+
+```keywords
+JSON
+real number
+decimal
+parse
+```
+
+## `📦 json` accepts `G` to `Z` after `\u`
+
+In the official compiler, if the four characters after `\u` in the `json` package contain `G` to `Z` (or `g` to `z`), which are not hexadecimal digits, it does not raise an error and reads them as the wrong character. This happens in every environment.
+
+```emojicode
+📦 json 🏠
+
+🏁 🍇
+  🔂 text 🍿 🔤"A"🔤 🔤"\u004G"🔤 🍆 🍇
+    🆗 value ⚪️🕊🌸 text❗️ 🍇
+      ↪️ 🔲 value 🔡 ➡️ s 🍇
+        😀 s❗️
+      🍉
+    🍉
+    🙅 error 🍇
+      😀 💬 error❗️❗️
+    🍉
+  🍉
+🍉
+```
+
+```output Result in this IDE
+A
+\u must be followed by four characters in range 0-9, A-F, a-f
+```
+
+```official
+A
+P
+```
+
+The official compiler checks the letters of a hexadecimal number against the range `A` to `Z`, so it reads `G` as 16. `004G` is 4 × 16 + 16 = 80, which is `P`. The patch accepts only `A` to `F` (and `a` to `f`). The error message was already in the official compiler ([Packages and Documentation Comments](../advanced/packages.md)).
+
+```patch json/json.🍇 0x46
+```
+
+```keywords
+JSON
+\u
+escape
+hexadecimal
+```
+
+## `📦 json` reads a lone `-` as 0 without an error
+
+In the official compiler, passing just `-` (a `-` with no digits after it) to the `json` package does not raise an error and gives 0. This happens in every environment.
+
+```emojicode
+📦 json 🏠
+
+🏁 🍇
+  🆗 value ⚪️🕊🌸 🔤-🔤❗️ 🍇
+    ↪️ 🔲 value 🔢 ➡️ n 🍇
+      😀 🔡 n❗️❗️
+    🍉
+  🍉
+  🙅 error 🍇
+    😀 💬 error❗️❗️
+  🍉
+🍉
+```
+
+```output Result in this IDE
+Expected digit after minus sign
+```
+
+```official
+0
+```
+
+The official compiler starts reading digits without checking that a digit follows the minus sign. Even if there are no digits at all, the value it read stays 0 and is returned. The patch raises the error `Expected digit after minus sign` when the minus sign is not followed by a digit ([Packages and Documentation Comments](../advanced/packages.md)).
+
+```patch json/json.🍇 minus
+```
+
+```keywords
+JSON
+minus
+negative number
+```
+
+## `⤴️🆕` in a subclass of a generic class does not pass the generic arguments to the superclass
+
+In the official compiler, when an initializer of a subclass of a generic class calls `⤴️🆕` (the superclass's initializer), the superclass's initializer is called with one argument missing. It compiles without errors.
+
+```emojicode
+🐇 🎁 🐚T ⚪️🍆 🍇
+  🖍🆕 content T
+  🆕 🍼 content T 🍇🍉
+  ❗️ 📤 ➡️ T 🍇
+    ↩️ content
+  🍉
+🍉
+
+🐇 🎀 🎁🐚🔡🍆 🍇
+  🆕 🍇
+    ⤴️🆕 🔤Ribbon🔤❗️
+  🍉
+🍉
+
+🐇 🧺🐚T ⚪️🍆 🎁🐚T🍆 🍇
+  🆕 item T 🍇
+    ⤴️🆕 item❗️
+  🍉
+🍉
+
+🏁 🍇
+  😀 📤 🆕🎀❗️❗️❗️
+  😀 🔡 📤 🆕🧺🐚🔢🍆 7❗️❗️❗️❗️
+🍉
+```
+
+```output Result in this IDE
+Ribbon
+7
+```
+
+```official
+CompileError: WebAssembly.compile(): … not enough arguments on the stack for call
+```
+
+An initializer of a class that keeps its generic arguments receives them as an extra argument. The official compiler's `⤴️🆕` treats the superclass type without its generic arguments and does not pass this argument. On WebAssembly, a call with the wrong number of arguments makes loading fail, so not a single line of the program runs (the result above is from WebAssembly without the patch). The patch passes the generic arguments the subclass received straight on to the superclass's initializer. This works because the subclass keeps the same generic arguments as the superclass, with the superclass's ones first ([Generics](../types/generics.md), [Inheritance](../types/inheritance.md)).
+
+```patch Compiler/AST/ASTSuper.cpp
+```
+
+```keywords
+generics
+inheritance
+superclass initializer
+super.init
+not enough arguments on the stack
+```
+
+## Calling a method directly on an instance taken out with `🧠`'s `🐽` produces invalid code
+
+In the official compiler, if you take a class instance (such as a string) out with `🐽` of `🧠` (a memory area) and call a method on it directly, without putting it in a variable first, the compiler produces invalid code (code that LLVM's checks reject with `Invalid indices for GEP pointer type!`).
+
+```emojicode
+🏁 🍇
+  ☣️ 🍇
+    🆕🧠 16❗️ ➡️ m
+    🔤abc🔤 ➡️ 🐽🐚🔡🍆 m 0❗️
+    😀 🐽🐚🔡🍆 m 0❗️❗️
+  🍉
+🍉
+```
+
+```output Result in this IDE
+abc
+```
+
+```official
+(the compiler exits without a message)
+```
+
+`🧠`'s `🐽` returns a reference (`✴️`) to the value, not a copy. When the receiver of a method call is a reference, the official compiler keeps it as a reference. A class instance, however, is already handled as “a pointer to the instance,” so keeping the reference means using “a pointer to the pointer” as the instance (the result above is from WebAssembly without the patch). The patch removes the reference before the call when the receiver is a class instance ([Miscellaneous Syntax](../advanced/misc.md)).
+
+Even with the official compiler, this does not happen if you first put the value in a variable, as in `🐽🐚🔡🍆 m 0❗️ ➡️ s`, and then call the method. Elements taken out with a list's `🐽` are not affected either.
+
+```patch Compiler/AST/ASTMethod.cpp TypeType::Class
+```
+
+```keywords
+🧠
+✴️
+reference
+memory
+compiler crash
+GEP
+```
+
+## Using a list's `🐼` on an empty list makes its length -1
+
+In the official compiler, using `🐼` (take out the last element) on an empty list does not return no value as its documentation comment says. Instead, it decreases the list's length by 1 and reads memory outside the list. This happens in every environment.
+
+```emojicode
+🏁 🍇
+  🆕🍨🐚🔢🍆❗️ ➡️ 🖍🆕 list
+  ↪️ 🐼 list❗️ ➡️ last 🍇
+    😀 🔤took one out🔤❗️
+  🍉
+  😀 🔡 📏 list❓❗️❗️
+  🐻 list 1❗️
+  😀 🔡 📏 list❓❗️❗️
+🍉
+```
+
+```output Result in this IDE
+0
+1
+```
+
+```official
+-1
+0
+```
+
+The official `🐼` decreases the length by 1 without checking whether the list is empty, and returns the value at that position (index -1). After the length has become -1, adding one element only brings it to 0 (the result above is from WebAssembly without the patch). With the patch, it does nothing and returns no value when the list is empty ([Lists and Dictionaries](../basics/collections.md)).
+
+```patch s/🍨.🍇
+```
+
+```keywords
+🐼
+pop
+empty list
+```
+
+## Turning a real number into a string with 19 or more digits breaks it
+
+In the official compiler, `🔡 real digits❗️` breaks the part after the decimal point when the number of digits is 19 or more. This happens in every environment.
+
+```emojicode
+🏁 🍇
+  😀 🔡 0.05 25❗️❗️
+  😀 🔡 -1.5 20❗️❗️
+🍉
+```
+
+```output Result in this IDE
+0.0500000000000000027755575
+-1.50000000000000000000
+```
+
+```official
+0.0000009223372036854775807
+-1.09223372036854775807
+```
+
+The official compiler multiplies the fractional part by 10 to the power of the number of digits, converts it to `long long`, and makes the digits from that. With 19 or more digits, the value does not fit in `long long`, and on WebAssembly it becomes the edge of the range (the result above is from WebAssembly without the patch). With the patch, when there are 19 or more digits, it uses C's `snprintf` to print 1100 digits after the decimal point (enough to represent the fractional part of a real number exactly) and then cuts them at the requested number of digits. Behavior with 18 or fewer digits ([truncation](known-issues.md)) is unchanged ([Strings](../basics/strings.md)).
+
+```patch s/Integer.cpp %.1100f
+```
+
+```keywords
+real number
+decimal
+digits
+precision
+```
+
+## `📦 json` accepts an `e` with no digits after it
+
+In the official compiler, when the `json` package reads a number with no digits after `e` (`E`), such as `1e` or `1.5e+`, it does not raise an error and reads the exponent as 0. When the input ends with `e` or a decimal point, it reads memory outside the input. This happens in every environment.
+
+```emojicode
+📦 json 🏠
+
+🏁 🍇
+  🔂 text 🍿 🔤[1e2]🔤 🔤[1e]🔤 🔤[1.5e+]🔤 🍆 🍇
+    🆗 value ⚪️🕊🌸 text❗️ 🍇
+      🍺 🔲 value 🍨🐚⚪️🍆 ➡️ list
+      ↪️ 🔲 🐽 list 0❗️ 💯 ➡️ r 🍇
+        😀 🔤🧲text🧲 → 🧲🔡 r 1❗️🧲🔤❗️
+      🍉
+    🍉
+    🙅‍♀️ error 🍇
+      😀 🔤🧲text🧲 → 🧲💬 error❗️🧲🔤❗️
+    🍉
+  🍉
+🍉
+```
+
+```output Result in this IDE
+[1e2] → 100.0
+[1e] → Expected digit in exponent
+[1.5e+] → Expected digit in exponent
+```
+
+```official
+[1e2] → 100.0
+[1e] → 1.0
+[1.5e+] → 1.5
+```
+
+After reading the sign after `e`, the official compiler reads an integer without checking that a digit follows. If there is none, it reads 0. It also reads the next character after `e` or a decimal point without checking whether the input has ended (the result above is from WebAssembly without the patch). With the patch, it raises `Expected digit in exponent` when no digit follows `e` (and its sign, if any), and `Expected digit after decimal point` when the input ends at a decimal point ([Packages and Documentation Comments](../advanced/packages.md)).
+
+```patch json/json.🍇 🔺🏂👇real❗️
+```
+
+```keywords
+JSON
+exponent
+```
+
+## Casting with `🔲` to a class with a generic superclass crashes the compiler
+
+In the official compiler, casting with `🔲` to a class that inherits from a generic class makes the compiler crash or never finish.
+
+```emojicode
+🐇 🎁🐚T ⚪️🍆 🍇
+  🆕 🍇🍉
+🍉
+
+🐇 🧺🐚B ⚪️ A ⚪️🍆 🎁🐚A🍆 🍇
+  🆕 🍇
+    ⤴️🆕❗️
+  🍉
+🍉
+
+🏁 🍇
+  🖍🆕 value ⚪️
+  🆕🧺🐚🔢 🔡🍆❗️ ➡️ 🖍value
+  ↪️ 🔲 value 🧺🐚🔢 🔡🍆 ➡️ basket 🍇
+    😀 🔤it is a 🧺🐚🔢 🔡🍆🔤❗️
+  🍉
+  ↪️ 🔲 value 🎁🐚🔡🍆 ➡️ gift 🍇
+    😀 🔤it is also a 🎁🐚🔡🍆🔤❗️
+  🍉
+  ↪️ 🔲 value 🎁🐚🔢🍆 ➡️ gift 🍇
+    😀 🔤it is a 🎁🐚🔢🍆🔤❗️
+  🍉
+🍉
+```
+
+```output Result in this IDE
+it is a 🧺🐚🔢 🔡🍆
+it is also a 🎁🐚🔡🍆
+```
+
+```official
+(the compiler crashes; LLVM's checks report Operand is null and loading unsized types is not allowed)
+```
+
+For a cast, the compiler builds information that describes the target type and its generic arguments (a type description). A subclass's generic arguments start with the superclass's (`A`, passed to `🎁`, for `🧺` above), written in terms of the subclass's own generic parameters (`A`). The official compiler does not replace them with the type's generic arguments; it looks for them among the generic arguments of the function being run, and reads something that is not there (the result above is from WebAssembly without the patch). With the patch, the subclass's own generic parameters inside the superclass's arguments are replaced with the target type's generic arguments (`🔡` in the example above) ([Generics](../types/generics.md), [Casting](../types/casting.md)).
+
+```patch Compiler/Generation/TypeDescriptionGenerator.cpp
+```
+
+```keywords
+generics
+inheritance
+cast
+🔲
+compiler crash
 ```
 
 :::
@@ -303,7 +960,7 @@ The official compiler also relies on x86-64 conventions for the way it passes cl
 
 ### Not starting processes
 
-The compiler starts external commands for linking, but that is not possible inside the browser. Linking is done by a separately prepared WebAssembly linker, and `💻` (running a command) is made to do nothing.
+The compiler starts external commands for linking, but that is not possible inside the browser. Linking is done by a separately prepared WebAssembly linker, and `🕴🐇💻` (running a command) is made to do nothing.
 
 ```patch Compiler/Compiler.cpp
 ```
@@ -313,7 +970,7 @@ The compiler starts external commands for linking, but that is not possible insi
 
 ### No threads
 
-Threads are not used inside the browser, so `🧵` just runs the closure you pass to it immediately ([Thread_wasi.cpp](/docs/patches/Thread_wasi.cpp.txt)).
+Threads are not used inside the browser, so `🧵` just runs the closure you pass to it immediately ([Thread_wasi.cpp](/docs/patches/Thread_wasi.cpp.txt)). Since no other thread ever competes for a mutex, `🔒` and `🔓` do nothing and `🔐` always returns `👍`.
 
 ### Building the compiler itself for WebAssembly
 

@@ -227,7 +227,8 @@ ends_with
 | `🔪 string start length❗️` | Take out part of it (position and length count visible characters) |
 | `🔧 string❗️` | Remove whitespace at both ends |
 | `🔫 string separator❗️` | Split at the separator into a list (`🍨🐚🔡🍆`) |
-| `🔍 string search❗️` | The position where it was found (`🍬🔢`) |
+| `🔍 string search❗️` | The position of the first match (`🍬🔢`; counted in bytes) |
+| `🕵️‍♀️ string search start❗️` | The position of the first match at or after the start position (`🍬🔢`; counted in bytes) |
 | `🎼 string prefix❗️` / `⛳️ string suffix❗️` | Whether it starts / ends with that string (`👌`) |
 
 ```emojicode
@@ -258,6 +259,51 @@ length
 string length
 character count
 byte count
+```
+
+### Searching (🔍, 🕵️‍♀️)
+
+Unlike `🔪`, the positions returned by `🔍` and `🕵️‍♀️` count UTF-8 bytes. For ASCII-only text that is the same as the character position, but `🔍 🔤あいう🔤 🔤う🔤❗️` is 6, not 2.
+
+`🕵️‍♀️` searches from the position given as its third argument (also in bytes). By searching again from just after each match, you can visit every place where the string occurs.
+
+```emojicode
+🏁 🍇
+  🔤abcabcab🔤 ➡️ text
+  0 ➡️ 🖍🆕 from
+  👍 ➡️ 🖍🆕 more
+  🔁 more 🍇
+    ↪️ 🕵️‍♀️ text 🔤ab🔤 from❗️ ➡️ i 🍇
+      👄 🔤🧲🔡 i❗️🧲 🔤❗️
+      i ➕ 1 ➡️ 🖍from
+    🍉
+    🙅 🍇
+      👎 ➡️ 🖍more
+    🍉
+  🍉
+  😀 🔤🔤❗️
+  ↪️ 🔍 🔤あいう🔤 🔤う🔤❗️ ➡️ i 🍇
+    😀 🔡 i❗️❗️
+  🍉
+🍉
+```
+
+```output
+0 3 6 
+6
+```
+
+If the start position is equal to or greater than the string's byte count, it returns no value without searching.
+
+```keywords
+find
+std::string::find
+find(s, pos)
+indexOf
+search
+all occurrences
+position
+byte offset
 ```
 
 ## Going through characters
@@ -349,4 +395,162 @@ same
 
 ```output
 Same
+```
+
+### Ordering (↔️)
+
+`↔️ string other❗️` returns the order of two strings as an integer: -1 means before, 0 means equal, and 1 means after. You can pass it straight to `🦁` for sorting ([Lists and Dictionaries](collections.md)).
+
+This order is not dictionary order, though. It compares the byte counts first and puts **the longer string first**. Only when the byte counts are equal does it compare byte by byte from the start.
+
+```emojicode
+🏁 🍇
+  🍿 🔤pear🔤 🔤fig🔤 🔤apple🔤 🔤kiwi🔤 🍆 ➡️ 🖍🆕 fruits
+  🦁 fruits 🍇 a 🔡 b 🔡 ➡️ 🔢 ↩️ ↔️ a b❗️ 🍉❗️
+  😀 🆕🔡 fruits 🔤 🔤❗️❗️
+  ↪️ ↔️ 🔤abc🔤 🔤abd🔤❗️ ◀️ 0 🍇
+    😀 🔤abc comes first🔤❗️
+  🍉
+🍉
+```
+
+```output
+apple kiwi pear fig
+abc comes first
+```
+
+The 5-byte `apple` comes first and the 3-byte `fig` comes last. `kiwi` and `pear` both have 4 bytes, and `k` is smaller than `p`, so `kiwi` comes first.
+
+In the official compiler, `↔️` has a bug where it returns the result of C's `memcmp` as is instead of -1, 0, or 1 (on WebAssembly, the difference of the first differing bytes: -23 for `🔤abc🔤` and `🔤abz🔤`); this IDE fixes it (see [Fixed Bugs](../about/patched.md)).
+
+```keywords
+compare
+std::string::compare
+strcmp
+<=>
+ordering
+less than
+sort
+```
+
+### Hash values (⚗️)
+
+`⚗️ string❗️` returns a hash value (`🔢`) of the string. Strings with the same contents always give the same value within one run of a program. Dictionaries (`🍯`) also use this value to decide where to store a key.
+
+```emojicode
+🏁 🍇
+  🔤emo🔤 ➡️ head
+  ↪️ ⚗️ 🔤emoji🔤❗️ 🙌 ⚗️ 🔤🧲head🧲ji🔤❗️ 🍇
+    😀 🔤Same hash value🔤❗️
+  🍉
+🍉
+```
+
+```output
+Same hash value
+```
+
+The value itself changes every time you run the program, because the calculation mixes in a number chosen at random at startup. You can't, for example, save it to a file and compare it in the next run.
+
+```keywords
+hash
+std::hash
+hashCode
+```
+
+## Building strings (🔠)
+
+`🔠` is a container you can keep appending strings to (a StringBuilder in other languages). A `🔡` can't change after it's made, so appending with something like `🔤🧲s🧲x🔤 ➡️ 🖍s` creates a new string every time. `🔠` writes into a space with room to spare, so even many appends stay fast.
+
+```emojicode
+🏁 🍇
+  🆕🔠❗️ ➡️ builder
+  🔂 i 🆕⏩ 1 6❗️ 🍇
+    🐻 builder 🔡 i❗️❗️
+    ↪️ i ◀️ 5 🍇
+      🐻 builder 🔤-🔤❗️
+    🍉
+  🍉
+  😀 🔡 builder❗️❗️
+  😀 🔡 📐 builder❗️❗️❗️
+  🆕🔠▶️🔡 🔤emoji🔤❗️ ➡️ name
+  🐻 name 🔤code🔤❗️
+  😀 🔤[🧲name🧲]🔤❗️
+🍉
+```
+
+```output
+1-2-3-4-5
+9
+[emojicode]
+```
+
+| Syntax | Meaning |
+|---|---|
+| `🆕🔠❗️` | Create an empty `🔠` (capacity 16 bytes) |
+| `🆕🔠 capacity❗️` | Create an empty `🔠` with the given capacity in bytes |
+| `🆕🔠▶️🔡 string❗️` | Create a `🔠` that starts with the string |
+| `🐻 🔠 string❗️` | Append a string at the end |
+| `📐 🔠❗️` | The number of bytes of the contents in UTF-8 |
+| `🔡 🔠❗️` | The contents as a string (`🔡`) |
+
+The string made by `🔡` is a copy of the contents, so appending to the `🔠` afterwards doesn't change it. `🔠` conforms to the protocol `↘️🔸🔡`, so you can also put it directly into `🧲`.
+
+When appending a one-character string over and over, creating a new string with `🧲` each time took about 0.6 seconds for 20,000 appends, about 3 seconds for 30,000, and didn't finish within 10 seconds for 40,000. With `🐻` on a `🔠`, even 1,000,000 appends take about 0.04 seconds (these are rough figures measured on one computer and vary by machine).
+
+Unlike a list, `🔠` is a class ([Classes](../types/classes.md)). Assigning it or passing it to a method refers to the same single `🔠`. You can `🐻` to it even when it's in a variable that isn't `🖍🆕`, and strings appended inside a method that received it are visible to the caller too.
+
+```emojicode
+🐇 🖨 🍇
+  🐇❗️ 🌟 out 🔠 n 🔢 🍇
+    🔂 i 🆕⏩ 0 n❗️ 🍇
+      🐻 out 🔤*🔤❗️
+    🍉
+  🍉
+🍉
+
+🏁 🍇
+  🆕🔠❗️ ➡️ line
+  🌟🐇🖨 line 3❗️
+  🐻 line 🔤|🔤❗️
+  🌟🐇🖨 line 2❗️
+  😀 🔡 line❗️❗️
+🍉
+```
+
+```output
+***|**
+```
+
+```keywords
+StringBuilder
+std::ostringstream
+stringstream
+string builder
+string concatenation
++=
+append
+slow
+```
+
+### Unsafe methods
+
+`🔠` also has methods that can only be called inside `☣️ 🍇 … 🍉` ([Unsafe code (☣️)](../advanced/misc.md#Unsafe-code-☣️)).
+
+| Syntax | Meaning |
+|---|---|
+| `🐺 🔠 memory position bytes❗️` | Append that many bytes of the memory (`🧠`), starting at the position |
+| `🐻🔸💧 🔠 byte❗️` | Append a single byte (`💧`) |
+| `🐻🔸🔣 🔠 code-point❗️` | Append the character for that code point (if it isn't a valid code point, do nothing and return `👎`) |
+
+`🐺` and `🐻🔸💧` don't check that the contents are still valid UTF-8 afterwards. If the bytes become invalid, what happens next is undefined. `🐻🔸🔣` rejects negative numbers, surrogates (`0xD800`–`0xDFFF`), and numbers of `0x110000` or more. The official compiler has a bug where it accepts surrogates; this IDE fixes it (see [Fixed Bugs](../about/patched.md)).
+
+Also, `🧠 string❗️` and `🧠 🔠❗️` return the memory (`🧠`) holding the contents without copying it. You can call them outside `☣️`, but every method that reads or writes the returned memory can only be used inside `☣️` ([The contents of strings and byte sequences (🧠)](../advanced/misc.md#The-contents-of-strings-and-byte-sequences-🧠)).
+
+```keywords
+code point
+chr
+unicode
+byte
+memory
 ```
