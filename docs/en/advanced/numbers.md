@@ -146,7 +146,7 @@ maximum value
 
 ## Negating a number (🔋)
 
-`🔋 number❗️` gives the value with its sign flipped (`-x`).
+`🔋 number❗️` gives the value with its sign flipped (`-x`). It works on integers (`🔢`), reals (`💯`), and bytes (`💧`).
 
 ```emojicode
 🏁 🍇

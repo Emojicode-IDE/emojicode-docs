@@ -39,6 +39,37 @@ length
 element count
 ```
 
+### Taking part of a list (🔪)
+
+`🔪 list index count❗️` returns a new list with `count` elements, starting at that index. The original list doesn't change. If the range goes past the end of the list, it is cut short, and if the index is outside the list, you get an empty list.
+
+```emojicode
+🏁 🍇
+  🍿 0 1 2 3 4 5 6 7 8 9 🍆 ➡️ list
+  🔂 n 🔪 list 2 4❗️ 🍇
+    👄 🔤🧲🔡 n❗️🧲 🔤❗️
+  🍉
+  😀 🔤🔤❗️
+  🔂 n 🔪 list 7 6❗️ 🍇
+    👄 🔤🧲🔡 n❗️🧲 🔤❗️
+  🍉
+  😀 🔤🔤❗️
+  😀 🔡 📏 🔪 list 10 6❗️❓❗️❗️
+🍉
+```
+
+```output
+2 3 4 5 
+7 8 9 
+0
+```
+
+```keywords
+slice
+sublist
+subvector
+```
+
 ### Changing a list
 
 To change a list, create its variable with `🖍🆕`.
@@ -508,6 +539,7 @@ There are no bananas
 | `🐣 dictionary key❗️` | Whether the key exists (`👌`) |
 | `🐨 dictionary key❗️` | Remove the key |
 | `🐙 dictionary❗️` | A list of the keys |
+| `🐗 dictionary❗️` | Remove all items, and return how many were removed |
 | `📏 dictionary❓` | The number of entries |
 
 ```keywords

@@ -166,6 +166,38 @@ Not a number
 
 `↪️` and `🙅` are conditionals (if and else). Optionals are covered in detail in a later chapter.
 
+To get a real number, use `💯 string❗️`. The result is a `🍬💯`. It can read forms such as `2.5`, `-1e3`, and `.5`. If there are spaces or other characters before or after the number, you get no value.
+
+```emojicode
+🏁 🍇
+  🍿 🔤2.5🔤 🔤-1e3🔤 🔤.5🔤 🔤 2.5🔤 🔤2.5kg🔤 🍆 ➡️ texts
+  🔂 t texts 🍇
+    ↪️ 💯 t❗️ ➡️ r 🍇
+      😀 🔡 r 2❗️❗️
+    🍉
+    🙅 🍇
+      😀 🔤-🔤❗️
+    🍉
+  🍉
+🍉
+```
+
+```output
+2.50
+-1000.00
+0.50
+-
+-
+```
+
+```keywords
+stod
+std::stod
+atof
+parseFloat
+string to double
+```
+
 ### Character → character code
 
 `📇 string❗️` turns a string into its UTF-8 byte sequence (`📇`). `🐽 bytes index❗️` takes out the byte at that index (`💧`), and `🔢 byte❗️` turns it into an integer. ASCII characters such as letters, digits, and symbols are 1 byte each, so this is their character code.
@@ -294,6 +326,21 @@ Unlike `🔪`, the positions returned by `🔍` and `🕵️‍♀️` count UTF
 ```
 
 If the start position is equal to or greater than the string's byte count, it returns no value without searching.
+
+Byte arrays (`📇`) also have `🔍`. You always pass a start position: `🔍 bytes search start❗️`. The position it returns counts bytes from the beginning, not from the start position. The start position works the same way as with `🕵️‍♀️`.
+
+```emojicode
+🏁 🍇
+  📇 🔤abcabc🔤❗️ ➡️ bytes
+  ↪️ 🔍 bytes 📇 🔤bc🔤❗️ 2❗️ ➡️ i 🍇
+    😀 🔡 i❗️❗️
+  🍉
+🍉
+```
+
+```output
+4
+```
 
 ```keywords
 find

@@ -59,3 +59,35 @@ for-each
 Iterable
 Iterator
 ```
+
+## Iterators of the standard types (🍡, 🌳)
+
+You can also take the iterator of a standard type with `🍡 value❗️` and step through it with `🔽`. For lists, ranges (`⏩`), and byte arrays (`📇`), `🍡` returns a `🌳`. A `🌳` is an iterator that goes through, from the beginning, any type whose elements you can get by index with `🐽`. For strings, `🍡` returns an iterator that takes out one character at a time.
+
+An iterator itself can also be looped over with `🔂`. The loop then continues after whatever you already took out with `🔽`.
+
+```emojicode
+🏁 🍇
+  🍿 🔤name,score🔤 🔤alice,80🔤 🔤bob,95🔤 🍆 ➡️ lines
+  🍡 lines❗️ ➡️ it
+  ↪️ 🔽 it❓ 🍇
+    😀 🔤header: 🧲🔽 it❗️🧲🔤❗️
+  🍉
+  🔂 line it 🍇
+    😀 line❗️
+  🍉
+🍉
+```
+
+```output
+header: name,score
+alice,80
+bob,95
+```
+
+```keywords
+iterator
+next
+skip first
+header
+```
