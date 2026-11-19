@@ -759,6 +759,8 @@ abc
 
 Even with the official compiler, this does not happen if you first put the value in a variable, as in `🐽🐚🔡🍆 m 0❗️ ➡️ s`, and then call the method. Elements taken out with a list's `🐽` are not affected either.
 
+When the output is formatted as shown above on AtCoder, the execution result is returned as RE. The same issue occurs in the Custom Test, which returns exit code '139'.
+
 ```patch Compiler/AST/ASTMethod.cpp TypeType::Class
 ```
 
