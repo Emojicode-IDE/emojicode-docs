@@ -8,13 +8,8 @@
 📦 json 🏠
 
 🏁 🍇
-  🍺 ⚪️🕊🌸 🔤{"name": "えもじ", "age": 3}🔤❗️ ➡️ value
-  ↪️ 🔲 value 🍯🐚⚪️🍆 ➡️ object 🍇
-    ↪️ 🐽 object 🔤name🔤❗️ ➡️ name 🍇
-      ↪️ 🔲 name 🔡 ➡️ text 🍇
-        😀 text❗️
-      🍉
-    🍉
+  ↪️ 🔲 🍺 ⚪️🕊🌸 🔤"えもじ"🔤❗️ 🔡 ➡️ text 🍇
+    😀 text❗️
   🍉
 🍉
 ```
@@ -166,7 +161,7 @@ ef
 戻しても読めない
 ```
 
-`🔛` で前に戻って書くと、そこにあった内容を上書きします。`🔚` で末尾に移れば、続けて書いた内容は後ろに足されます。
+`🔛` で前に戻って書くと、そこにあった内容を上書きします。`🔚`（末尾に移る）は、末尾ではなく先頭から 2 バイト進んだ位置（3 バイト目）に移ってしまいます（[EJ027](../about/known-issues.md#EJ027)）。
 
 ```emojicode
 📦 files 🏠
@@ -184,12 +179,10 @@ ef
 ```
 
 ```output
-XbcdefZ
+XbZdef
 ```
 
-公式コンパイラの `🔚` は、末尾ではなく先頭から 2 バイト進んだ位置（3 バイト目）に移るバグがあり、この IDE では直しています（[修正済みのバグ](../about/patched.md)）。
-
-`files.🍇` には、標準出力・標準入力・標準エラーを `📄` として返す `📤` `📥` `📯` も書かれていますが、コメントになっていて使えません（[Emojicode言語のバグ](../about/known-issues.md)）。
+`files.🍇` には、標準出力・標準入力・標準エラーを `📄` として返す `📤` `📥` `📯` も書かれていますが、コメントになっていて使えません（[EJ029](../about/known-issues.md#EJ029)）。
 
 ```keywords
 fopen
@@ -288,12 +281,13 @@ std::filesystem
 
 `json` パッケージは、JSON の文字列を読んで Emojicode の値にします（JSON を書き出す機能はありません）。結果は `⚪️`（どんな型でもよい値）なので、`🔲` で型を確かめて取り出します（[キャスト](../types/casting.md)）。
 
+`🔲` でキャストする値は、変数に入れずに式のまま渡します。変数に入っている文字列やリストをキャストして、`➡️` で別の変数に入れると、片付けるときに同じものを 2 回解放してしまいます（[EJ031](../about/known-issues.md#EJ031)）。下の例のように、確かめるだけなら `🙌 🤷‍♀️` と比べ、使うときは `🍺🔲` でそのまま使います。
+
 ```emojicode
 📦 json 🏠
 
 🏁 🍇
-  🍺 ⚪️🕊🌸 🔤[1, 2.5, "a", true, null, [], {}]🔤❗️ ➡️ value
-  🍺 🔲 value 🍨🐚⚪️🍆 ➡️ list
+  🍺 🔲 🍺 ⚪️🕊🌸 🔤[1, 2.5, "a", true, null, [], {}]🔤❗️ 🍨🐚⚪️🍆 ➡️ list
   🔂 item list 🍇
     ↪️ 🔲 item 🔢 ➡️ n 🍇
       😀 🔤🔢 🧲🔡 n❗️🧲🔤❗️
@@ -301,16 +295,16 @@ std::filesystem
     🙅↪️ 🔲 item 💯 ➡️ r 🍇
       😀 🔤💯 🧲🔡 r 1❗️🧲🔤❗️
     🍉
-    🙅↪️ 🔲 item 🔡 ➡️ s 🍇
-      😀 🔤🔡 🧲s🧲🔤❗️
+    🙅↪️ ❎ 🔲 item 🔡 🙌 🤷‍♀️❗️ 🍇
+      😀 🔤🔡 🧲🍺🔲 item 🔡🧲🔤❗️
     🍉
     🙅↪️ 🔲 item 👌 ➡️ b 🍇
       😀 🔤👌🔤❗️
     🍉
-    🙅↪️ 🔲 item 🍨🐚⚪️🍆 ➡️ l 🍇
+    🙅↪️ ❎ 🔲 item 🍨🐚⚪️🍆 🙌 🤷‍♀️❗️ 🍇
       😀 🔤🍨🔤❗️
     🍉
-    🙅↪️ 🔲 item 🍯🐚⚪️🍆 ➡️ d 🍇
+    🙅↪️ ❎ 🔲 item 🍯🐚⚪️🍆 🙌 🤷‍♀️❗️ 🍇
       😀 🔤🍯🔤❗️
     🍉
     🙅 🍇
@@ -333,14 +327,14 @@ null
 | JSON | Emojicode の値 |
 |---|---|
 | 文字列 | `🔡` |
-| 小数点も `e` `E` もない数 | `🔢`（`🔢` に収まらなければ `💯`） |
+| 小数点も `e` `E` もない数 | `🔢`（`🔢` に収まらない数は正しく読めない。[EJ022](../about/known-issues.md#EJ022)） |
 | 小数点か `e` `E` がある数 | `💯` |
 | `true` `false` | `👌` |
 | `null` | 値なし（`🤷‍♂️`）。どの型の `🔲` にも当てはまらない |
 | 配列 | `🍨🐚⚪️🍆` |
 | オブジェクト | `🍯🐚⚪️🍆` |
 
-オブジェクトの値が `null` のとき、`🐽` で取り出すと、キーがないときと同じく値なしになります。2 つは区別できません。
+オブジェクト（`🍯🐚⚪️🍆`）から `🐽` で値を取り出そうとすると、公式コンパイラは内部のチェックで止まります（[EJ032](../about/known-issues.md#EJ032)）。取り出せるのは、キーの一覧（`🐙`）だけです。
 
 | 書き方 | 意味 |
 |---|---|
@@ -357,9 +351,7 @@ null
 🏁 🍇
   🆕🌸▶️📇 📇 🔤"データ"🔤❗️❗️ ➡️ 🖍🆕 parser
   🆗 value ⚪️ parser❗️ 🍇
-    ↪️ 🔲 value 🔡 ➡️ text 🍇
-      😀 text❗️
-    🍉
+    😀 🍺🔲 value 🔡❗️
   🍉
   🙅 error 🍇
     😀 💬 error❗️❗️
@@ -416,9 +408,7 @@ Unexpected input after end of value.
 | `Invalid JSON.` | 値が始まるはずの場所に、値にならない文字がある（`'a'`、`"` のないキー、最後の要素の後ろの `,` など） |
 | `Expected }.` | オブジェクトの値の後ろに、`,` も `}` もない |
 | `Expected ].` | 配列の要素の後ろに、`,` も `]` もない |
-| `Expected digit after decimal point` | 小数点の後ろに数字がない（`1.` など） |
-| `Expected digit after minus sign` | `-` の後ろに数字がない（`-` だけ、`-x` など） |
-| `Expected digit in exponent` | `e` `E` の後ろに数字がない（`1e`、`1e+` など） |
+| `Expected digit after decimal point` | 小数点の後ろが数字でない（`1.x` など。入力が `1.` で終わるときは [EJ010](../about/known-issues.md#EJ010)） |
 | `Unrecognized escape sequence.` | `\` の後ろが、JSON のエスケープにない文字（`\x` など） |
 | `\u must be followed by four characters in range 0-9, A-F, a-f` | `\u` の後ろの 4 文字に、16 進数の数字でない文字がある（`\u00G1` など） |
 | `\u sequence is begin of surrogate pair but not followed by another \u sequence` | サロゲートペアの前半（`\ud83d` など）の後ろに、後半の `\u` がない |
@@ -427,12 +417,10 @@ Unexpected input after end of value.
 📦 json 🏠
 
 🏁 🍇
-  🍿 🔤-🔤 🔤"\u00G1"🔤 🔤"\u00e9"🔤 🍆 ➡️ inputs
+  🍿 🔤tru🔤 🔤"\x"🔤 🔤"\u00e9"🔤 🍆 ➡️ inputs
   🔂 text inputs 🍇
     🆗 value ⚪️🕊🌸 text❗️ 🍇
-      ↪️ 🔲 value 🔡 ➡️ s 🍇
-        😀 s❗️
-      🍉
+      😀 🍺🔲 value 🔡❗️
     🍉
     🙅 error 🍇
       😀 💬 error❗️❗️
@@ -442,12 +430,12 @@ Unexpected input after end of value.
 ```
 
 ```output
-Expected digit after minus sign
-\u must be followed by four characters in range 0-9, A-F, a-f
+Unexpected end of input.
+Unrecognized escape sequence.
 é
 ```
 
-公式コンパイラの `json` には、`-` だけの入力や `1e`、`\u` の後ろの `G`〜`Z` をエラーにせず読んでしまうバグと、数を読み違えるバグ（小数点のすぐ後ろの `0` が消えて `0.05` が `0.5` になる、`🔢` に収まらない `18446744073709551616` や、小数点の後ろの数字が 19 個以上ある数が壊れる）があり、この IDE では直しています（[修正済みのバグ](../about/patched.md)）。
+`json` には、`-` だけの入力や `1e`、`\u` の後ろの `G`〜`Z` をエラーにせず読んでしまうバグと、数を読み違えるバグ（小数点のすぐ後ろの `0` が消えて `0.05` が `0.5` になるなど）があります（[EJ022](../about/known-issues.md#EJ022)〜[EJ025](../about/known-issues.md#EJ025)）。
 
 ```keywords
 JSON エラー

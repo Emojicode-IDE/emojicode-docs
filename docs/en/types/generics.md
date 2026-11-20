@@ -145,9 +145,9 @@ hi
 
 `🧮` inherits from "a `🎁` that holds a `🔢`", so `content` can be used as a `🔢`. `🎀🐚🔡🍆` is a subclass of `🎁🐚🔡🍆`, so it can be stored in a `🎁🐚🔡🍆` variable. Neither defines an initializer, so both are created with the superclass's `🆕`.
 
-When a subclass defines an initializer, it calls the superclass's initializer with `⤴️🆕`, just as with ordinary classes ([Inheritance](inheritance.md)). `🏷` is a subclass that stays generic, and `🎲` is one that fixes the type argument to `🔢`.
+However, if a subclass defines an initializer and calls the superclass's initializer with `⤴️🆕`, as with ordinary classes ([Inheritance](inheritance.md)), the official compiler generates a call that does not pass the type arguments to the superclass's initializer, and the program does not work correctly ([EJ003](../about/known-issues.md#EJ003)). In this IDE, it is a compile error. In the example below, `🏷` is a subclass that stays generic, and `🎲` is one that fixes the type argument to `🔢`. Instead of writing an initializer in the subclass, create it with the superclass's `🆕`, like `🧮` and `🎀` above.
 
-```emojicode
+```emojicode error
 🐇 🎁 🐚T ⚪️🍆 🍇
   🖍🆕 content T
 
@@ -185,15 +185,11 @@ When a subclass defines an initializer, it calls the superclass's initializer wi
 🍉
 ```
 
-```output
-apple: 3
-color: red
-6
+```text
+[EJ003]
 ```
 
 When you pass a subclass's type argument on to the superclass, its constraint must satisfy the superclass's constraint. If the superclass has `🐚T 🔢🍆` but the subclass keeps `🐚T ⚪️🍆`, you get the error `is not compatible to constraint`.
-
-In the official compiler, calling `⤴️🆕` in the initializer of a subclass of a generic class has a bug: the type arguments are not passed to the superclass's initializer, and the program does not work correctly. This IDE fixes it (see [Fixed Bugs](../about/patched.md)).
 
 ```keywords
 generic subclass

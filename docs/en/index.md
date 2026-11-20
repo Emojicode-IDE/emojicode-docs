@@ -16,7 +16,7 @@ You can run the code examples on this site right on the page. Press **▶ Run** 
 Welcome!
 ```
 
-There is also a [Comparison with C++](reference/cpp.md), a summary of bugs found in the official compiler and their fixes ([Emojicode Language Bugs](about/known-issues.md), [Fixed Bugs](about/patched.md)), and [Docs for LLMs](intro/llm.md) to give to an LLM.
+There is also a [Comparison with C++](reference/cpp.md), a summary of bugs found in the official compiler ([Emojicode Language Bugs](about/known-issues.md)), and [Docs for LLMs](intro/llm.md) to give to an LLM.
 
 ## How to read
 

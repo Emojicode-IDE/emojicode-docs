@@ -16,7 +16,7 @@ Emojicode を動かしながら学ぶための、非公式のリファレンス�
 ようこそ！
 ```
 
-ほかに、[C++ との対応表](reference/cpp.md)、公式コンパイラで見つかっているバグとその修正のまとめ（[Emojicode言語のバグ](about/known-issues.md)・[修正済みのバグ](about/patched.md)）、LLM に読ませるための [LLM 向けドキュメント](intro/llm.md) もあります。
+ほかに、[C++ との対応表](reference/cpp.md)、公式コンパイラで見つかっているバグのまとめ（[Emojicode言語のバグ](about/known-issues.md)）、LLM に読ませるための [LLM 向けドキュメント](intro/llm.md) もあります。
 
 ## 読み方
 

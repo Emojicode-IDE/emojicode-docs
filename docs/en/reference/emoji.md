@@ -1,6 +1,6 @@
 # Emoji Quick Reference
 
-This is a list of the emoji that the Emojicode compiler treats specially as “keywords.” Any emoji not listed here can be used as the name of a type, method, or variable (though [newer emoji may not work](../about/known-issues.md)).
+This is a list of the emoji that the Emojicode compiler treats specially as “keywords.” Any emoji not listed here can be used as the name of a type, method, or variable (though [newer emoji may not work](../about/known-issues.md#EJ021)).
 
 Types such as `🔢` `🔡` `🍨` are not keywords; they are types defined in the standard library `s`. The main ones are collected at the end. You can't create a type with the same name as a type in the standard library. Emoji such as `🌳`, which aren't in that last table, can't be used either, so if you get the error `is already defined`, pick another emoji ([Classes](../types/classes.md)).
 

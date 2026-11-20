@@ -39,6 +39,87 @@ Unexpected end of file.
 
 実行が 10 秒たっても終わらないときは、自動で止めます。出力が 20 万文字を超えたときも、そこで打ち切ります。
 
+## 公式コンパイラとの違い
+
+この IDE のコンパイラは、Emojicode の公式コンパイラ（[`master`](https://github.com/emojicode/emojicode/tree/master)、コミット `4dec45b`）をブラウザの中で動くようにしたもので、同じコードからは公式コンパイラと同じ結果になります。公式コンパイラのバグも、そのまま残しています（[Emojicode言語のバグ](known-issues.md)）。
+
+ただし、公式コンパイラが落ちたり、終わらなくなったりするところでは、`[EJ001]` のような ID をつけたエラーで止まります。出力に出た ID を押すと、そのバグの説明と避け方が開きます。
+
+```emojicode panic
+🏁 🍇
+  🔂 part 🔫 🔤abc🔤 🔤🔤❗️ 🍇
+    😀 part❗️
+  🍉
+🍉
+```
+
+```output
+🤯 Program panicked: [EJ001] 🔫 was called with an empty separator. With the official compiler, this never ends.
+```
+
+```keywords
+公式コンパイラ
+バグ
+EJ001
+panicked
+```
+
+## WebAssembly で動かすための変更
+
+ブラウザの中で動かすために、公式コンパイラから変えているところです。変更の全体は [emojicode-wasm32.patch](/docs/patches/emojicode-wasm32.patch.txt) にあります。
+
+### 32 ビットの WebAssembly で落ちるところ
+
+公式コンパイラには、64 ビットの環境では動き、32 ビットの WebAssembly では落ちるところがあります。どれも、結果が公式コンパイラと同じになるように変えています。
+
+`値 🙌 🤷‍♀️`（値なしとの比較）では、コンパイラが使わない値を作ろうとして、コンパイラの中で未定義動作が起きます。
+
+```patch Compiler/AST/ASTBinaryOperator_CG.cpp IsNoValue
+```
+
+クラスのインスタンスが持っている「クラスの情報」の先頭の並び方が、コンパイラとランタイムで食い違っています。64 ビットでは大きさが同じなので問題になりませんが、32 ビットではずれます。
+
+```patch runtime/Runtime.h
+```
+
+`files` パッケージの `✏️` は、エラーを受け取る引数を宣言どおりに受け取るようにしています。書き込みに失敗してもエラーにならないのは、公式コンパイラと同じです（[EJ026](known-issues.md#EJ026)）。
+
+```patch files/File.cpp filesFileWrite
+```
+
+### 32 ビットの環境に合わせる
+
+公式コンパイラは、メモリを確保する `malloc` に 64 ビットの大きさを渡します。32 ビットの WebAssembly では型が合わないので、間に 1 つ関数をはさんでいます。
+
+```patch Compiler/Generation/RunTimeHelper.cpp
+```
+
+```patch runtime/main.cpp
+```
+
+クロージャを C++ に渡すときの形も、公式コンパイラは x86-64 の決まりに頼っています。WebAssembly のときだけ、受け取り方を変えています。
+
+```patch s/String.cpp sStringCodepoints
+```
+
+### プロセスを起動しない
+
+コンパイラはリンクのために外部のコマンドを起動しますが、ブラウザの中ではできません。リンクは別に用意した WebAssembly のリンカーで行い、`🕴🐇💻`（コマンドの実行）も何もしないようにしています。
+
+```patch Compiler/Compiler.cpp
+```
+
+```patch s/System.cpp
+```
+
+### スレッドなし
+
+ブラウザの中ではスレッドを使わないので、`🧵` は渡したクロージャをその場で実行するだけにしています（[Thread_wasi.cpp](/docs/patches/Thread_wasi.cpp.txt)）。ほかのスレッドと取り合うことがないので、ミューテックスの `🔒` と `🔓` は何もせず、`🔐` はいつも `👍` を返します。
+
+### コンパイラそのものを WebAssembly にする
+
+Emojicode のコンパイラは LLVM 8 を使っています。LLVM 8 を WebAssembly 向けにビルドするための変更は [llvm-8.0.1-wasi.patch](/docs/patches/llvm-8.0.1-wasi.patch.txt) にあります。
+
 ---
 
 > **この IDE の制限**（ブラウザの中で動かしているため）

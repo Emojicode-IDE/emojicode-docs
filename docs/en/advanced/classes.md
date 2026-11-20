@@ -4,7 +4,9 @@
 
 If you put `🔑` on an initializer, every subclass must also provide that initializer. In the subclass, you write it with `🔑` too.
 
-```emojicode
+However, if a subclass writes a `🔑` initializer, the official compiler stops on an internal check ([EJ032](../about/known-issues.md#EJ032)). This IDE also gives the `[EJ032]` error.
+
+```emojicode error
 🐇 🐾 🍇
   🖍🆕 name 🔡
   🔑 🆕 🍼 name 🔡 🍇🍉
@@ -17,6 +19,29 @@ If you put `🔑` on an initializer, every subclass must also provide that initi
   🔑 🆕 name 🔡 🍇
     ⤴️🆕 name❗️
   🍉
+🍉
+
+🏁 🍇
+  😀 🏷 🆕🐕 🔤Buddy🔤❗️❗️❗️
+🍉
+```
+
+```text
+[EJ032]
+```
+
+If the subclass writes no initializer, it can be created with the superclass's `🔑` initializer.
+
+```emojicode
+🐇 🐾 🍇
+  🖍🆕 name 🔡
+  🔑 🆕 🍼 name 🔡 🍇🍉
+  ❗️ 🏷 ➡️ 🔡 🍇
+    ↩️ name
+  🍉
+🍉
+
+🐇 🐕 🐾 🍇
 🍉
 
 🏁 🍇

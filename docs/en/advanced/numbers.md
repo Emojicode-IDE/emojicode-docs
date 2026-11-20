@@ -297,7 +297,7 @@ common logarithm
 |---|---|
 | `📔 x❗️` | arcsin |
 | `📙 x❗️` | arccos |
-| `📒 x❗️` | arctan |
+| `📒 x❗️` | arctan (but returns tan) |
 
 All angles are in radians.
 
@@ -312,10 +312,10 @@ All angles are in radians.
 ```output
 1.57
 3.14
-0.785
+1.557
 ```
 
-In the official compiler, `📒` has a bug where it returns tan; this IDE fixes it (see [Fixed Bugs](../about/patched.md)).
+`📒` returns tan 1 instead of arctan 1 (0.785) ([EJ016](../about/known-issues.md#EJ016)). You can compute arctan x as `📔 🤜x ➗ ⛷ 🤜1.0 ➕ x ✖️ x🤛❗️🤛❗️`.
 
 ```keywords
 asin
@@ -362,34 +362,26 @@ constant
 
 ## Infinity and NaN
 
-Dividing a real number by 0.0 gives infinity, and `0.0 ➗ 0.0`, or the square root or logarithm of a negative number, gives NaN (a value meaning "not a number"). Neither is an error. When turned into a string with `🔡`, infinity becomes `inf`, negative infinity `-inf`, and NaN `nan` (or `-nan` if its sign is negative), with no digits after a decimal point even if you ask for them.
+Dividing a real number by 0.0 gives infinity, and `0.0 ➗ 0.0`, or the square root or logarithm of a negative number, gives NaN (a value meaning "not a number"). Neither is an error. However, turning infinity, NaN, or a real number whose integer part does not fit in `🔢` into a string with `🔡` gives a broken string ([EJ008](../about/known-issues.md#EJ008)).
 
-Every comparison with NaN, whether `🙌`, `◀️`, `▶️`, `◀️🙌`, or `▶️🙌`, gives 👎. Even `n 🙌 n` is 👎, so if `❎ n 🙌 n❗️` is 👍, `n` is NaN.
+Every comparison with NaN, whether `🙌`, `◀️`, `▶️`, `◀️🙌`, or `▶️🙌`, gives 👍 ([EJ017](../about/known-issues.md#EJ017)). For any value other than NaN, `n ◀️ n` is always 👎, so if it is 👍, `n` is NaN.
 
 ```emojicode
 🏁 🍇
-  😀 🔡 1.0 ➗ 0.0 2❗️❗️
-  😀 🔡 -1.0 ➗ 0.0 2❗️❗️
   0.0 ➗ 0.0 ➡️ n
-  😀 🔡 n 2❗️❗️
   ↪️ n 🙌 n 🍇 😀 🔤equal🔤❗️ 🍉 🙅 🍇 😀 🔤not equal🔤❗️ 🍉
   ↪️ n ◀️ 1.0 🍇 😀 🔤less🔤❗️ 🍉 🙅 🍇 😀 🔤not less🔤❗️ 🍉
   ↪️ n ▶️🙌 1.0 🍇 😀 🔤greater or equal🔤❗️ 🍉 🙅 🍇 😀 🔤not greater or equal🔤❗️ 🍉
+  ↪️ n ◀️ n 🍇 😀 🔤NaN🔤❗️ 🍉
 🍉
 ```
 
 ```output
-inf
--inf
-nan
-not equal
-not less
-not greater or equal
+equal
+less
+greater or equal
+NaN
 ```
-
-Real numbers too large to fit in `🔢` are also turned into strings by `🔡` without losing digits. `🔡 100000000000000000000.0 1❗️` is `100000000000000000000.0`.
-
-In the official compiler, every comparison involving NaN gives 👍, and `🔡` on infinity, NaN, or large values produces broken numbers. This IDE fixes these (see [Fixed Bugs](../about/patched.md)).
 
 ```keywords
 inf

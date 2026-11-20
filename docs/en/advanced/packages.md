@@ -8,13 +8,8 @@
 📦 json 🏠
 
 🏁 🍇
-  🍺 ⚪️🕊🌸 🔤{"name": "Emoji", "age": 3}🔤❗️ ➡️ value
-  ↪️ 🔲 value 🍯🐚⚪️🍆 ➡️ object 🍇
-    ↪️ 🐽 object 🔤name🔤❗️ ➡️ name 🍇
-      ↪️ 🔲 name 🔡 ➡️ text 🍇
-        😀 text❗️
-      🍉
-    🍉
+  ↪️ 🔲 🍺 ⚪️🕊🌸 🔤"Emoji"🔤❗️ 🔡 ➡️ text 🍇
+    😀 text❗️
   🍉
 🍉
 ```
@@ -166,7 +161,7 @@ Cannot read 10 bytes
 Still cannot read after moving back
 ```
 
-If you move back with `🔛` and write, you overwrite what was there. If you move to the end with `🔚`, what you write next is added after the existing contents.
+If you move back with `🔛` and write, you overwrite what was there. `🔚` (move to the end) moves 2 bytes from the start (to the third byte) instead of to the end ([EJ027](../about/known-issues.md#EJ027)).
 
 ```emojicode
 📦 files 🏠
@@ -184,12 +179,10 @@ If you move back with `🔛` and write, you overwrite what was there. If you mov
 ```
 
 ```output
-XbcdefZ
+XbZdef
 ```
 
-In the official compiler, `🔚` has a bug where it moves 2 bytes from the start (to the third byte) instead of the end; this IDE fixes it (see [Fixed Bugs](../about/patched.md)).
-
-`files.🍇` also contains `📤`, `📥`, and `📯`, which would return standard output, standard input, and standard error as a `📄`, but they are commented out, so you cannot use them (see [Emojicode Language Bugs](../about/known-issues.md)).
+`files.🍇` also contains `📤`, `📥`, and `📯`, which would return standard output, standard input, and standard error as a `📄`, but they are commented out, so you cannot use them ([EJ029](../about/known-issues.md#EJ029)).
 
 ```keywords
 fopen
@@ -288,12 +281,13 @@ absolute path
 
 The `json` package reads a JSON string and turns it into Emojicode values (it cannot write JSON). The result is a `⚪️` (a value of any type), so you check its type with `🔲` and take it out (see [Casting](../types/casting.md)).
 
+Pass the value to `🔲` as an expression, without storing it in a variable first. If you cast a string or list held in a variable and store the result in another variable with `➡️`, the same object is freed twice when it is cleaned up ([EJ031](../about/known-issues.md#EJ031)). As in the example below, compare with `🙌 🤷‍♀️` when you only need to check, and use `🍺🔲` directly when you use the value.
+
 ```emojicode
 📦 json 🏠
 
 🏁 🍇
-  🍺 ⚪️🕊🌸 🔤[1, 2.5, "a", true, null, [], {}]🔤❗️ ➡️ value
-  🍺 🔲 value 🍨🐚⚪️🍆 ➡️ list
+  🍺 🔲 🍺 ⚪️🕊🌸 🔤[1, 2.5, "a", true, null, [], {}]🔤❗️ 🍨🐚⚪️🍆 ➡️ list
   🔂 item list 🍇
     ↪️ 🔲 item 🔢 ➡️ n 🍇
       😀 🔤🔢 🧲🔡 n❗️🧲🔤❗️
@@ -301,16 +295,16 @@ The `json` package reads a JSON string and turns it into Emojicode values (it ca
     🙅↪️ 🔲 item 💯 ➡️ r 🍇
       😀 🔤💯 🧲🔡 r 1❗️🧲🔤❗️
     🍉
-    🙅↪️ 🔲 item 🔡 ➡️ s 🍇
-      😀 🔤🔡 🧲s🧲🔤❗️
+    🙅↪️ ❎ 🔲 item 🔡 🙌 🤷‍♀️❗️ 🍇
+      😀 🔤🔡 🧲🍺🔲 item 🔡🧲🔤❗️
     🍉
     🙅↪️ 🔲 item 👌 ➡️ b 🍇
       😀 🔤👌🔤❗️
     🍉
-    🙅↪️ 🔲 item 🍨🐚⚪️🍆 ➡️ l 🍇
+    🙅↪️ ❎ 🔲 item 🍨🐚⚪️🍆 🙌 🤷‍♀️❗️ 🍇
       😀 🔤🍨🔤❗️
     🍉
-    🙅↪️ 🔲 item 🍯🐚⚪️🍆 ➡️ d 🍇
+    🙅↪️ ❎ 🔲 item 🍯🐚⚪️🍆 🙌 🤷‍♀️❗️ 🍇
       😀 🔤🍯🔤❗️
     🍉
     🙅 🍇
@@ -333,14 +327,14 @@ null
 | JSON | Emojicode value |
 |---|---|
 | String | `🔡` |
-| Number with no decimal point and no `e` or `E` | `🔢` (`💯` if it does not fit in `🔢`) |
+| Number with no decimal point and no `e` or `E` | `🔢` (numbers that do not fit in `🔢` are read incorrectly, [EJ022](../about/known-issues.md#EJ022)) |
 | Number with a decimal point or `e` / `E` | `💯` |
 | `true`, `false` | `👌` |
 | `null` | No value (`🤷‍♂️`). It matches no type in `🔲` |
 | Array | `🍨🐚⚪️🍆` |
 | Object | `🍯🐚⚪️🍆` |
 
-When a value in an object is `null`, taking it out with `🐽` gives no value, the same as when the key is missing. You cannot tell the two apart.
+If you try to take a value out of an object (`🍯🐚⚪️🍆`) with `🐽`, the official compiler stops on an internal check ([EJ032](../about/known-issues.md#EJ032)). All you can get is the list of keys (`🐙`).
 
 | Syntax | Meaning |
 |---|---|
@@ -357,9 +351,7 @@ The parser's `⚪️` advances its reading position, so keep the parser in a var
 🏁 🍇
   🆕🌸▶️📇 📇 🔤"data"🔤❗️❗️ ➡️ 🖍🆕 parser
   🆗 value ⚪️ parser❗️ 🍇
-    ↪️ 🔲 value 🔡 ➡️ text 🍇
-      😀 text❗️
-    🍉
+    😀 🍺🔲 value 🔡❗️
   🍉
   🙅 error 🍇
     😀 💬 error❗️❗️
@@ -415,9 +407,7 @@ Unexpected input after end of value.
 | `Invalid JSON.` | A character that cannot start a value is where a value should start (`'a'`, a key without `"`, a `,` after the last element, and so on) |
 | `Expected }.` | An object value is followed by neither `,` nor `}` |
 | `Expected ].` | An array element is followed by neither `,` nor `]` |
-| `Expected digit after decimal point` | No digit follows the decimal point (`1.` and so on) |
-| `Expected digit after minus sign` | No digit follows `-` (`-` alone, `-x`, and so on) |
-| `Expected digit in exponent` | No digit follows `e` or `E` (`1e`, `1e+`, and so on) |
+| `Expected digit after decimal point` | The character after the decimal point is not a digit (`1.x` and so on; for input that ends with `1.`, see [EJ010](../about/known-issues.md#EJ010)) |
 | `Unrecognized escape sequence.` | The character after `\` is not a JSON escape (`\x` and so on) |
 | `\u must be followed by four characters in range 0-9, A-F, a-f` | The four characters after `\u` include one that is not a hexadecimal digit (`\u00G1` and so on) |
 | `\u sequence is begin of surrogate pair but not followed by another \u sequence` | The first half of a surrogate pair (such as `\ud83d`) is not followed by a `\u` for the second half |
@@ -426,12 +416,10 @@ Unexpected input after end of value.
 📦 json 🏠
 
 🏁 🍇
-  🍿 🔤-🔤 🔤"\u00G1"🔤 🔤"\u00e9"🔤 🍆 ➡️ inputs
+  🍿 🔤tru🔤 🔤"\x"🔤 🔤"\u00e9"🔤 🍆 ➡️ inputs
   🔂 text inputs 🍇
     🆗 value ⚪️🕊🌸 text❗️ 🍇
-      ↪️ 🔲 value 🔡 ➡️ s 🍇
-        😀 s❗️
-      🍉
+      😀 🍺🔲 value 🔡❗️
     🍉
     🙅 error 🍇
       😀 💬 error❗️❗️
@@ -441,12 +429,12 @@ Unexpected input after end of value.
 ```
 
 ```output
-Expected digit after minus sign
-\u must be followed by four characters in range 0-9, A-F, a-f
+Unexpected end of input.
+Unrecognized escape sequence.
 é
 ```
 
-The official compiler's `json` has bugs where it reads `-` alone, `1e`, or `G` through `Z` after `\u` without an error, and bugs where it misreads numbers (a `0` right after the decimal point is lost, so `0.05` becomes `0.5`, and `18446744073709551616`, which does not fit in `🔢`, and numbers with 19 or more digits after the decimal point come out broken). This IDE fixes them (see [Fixed Bugs](../about/patched.md)).
+`json` has bugs where it reads `-` alone, `1e`, or `G` through `Z` after `\u` without an error, and bugs where it misreads numbers (a `0` right after the decimal point is lost, so `0.05` becomes `0.5`, and so on) ([EJ022](../about/known-issues.md#EJ022)–[EJ025](../about/known-issues.md#EJ025)).
 
 ```keywords
 JSON error

@@ -306,7 +306,7 @@ In this IDE threads never compete, so `🔒` and `🔓` do nothing, and `🔐` a
 Locked
 ```
 
-Natively, it returns 👎 while another thread holds the lock. In the official compiler, `🔐` has a bug where it does not return whether it could lock; this IDE fixes it ([`🔐` does not return whether the mutex was locked](../about/patched.md#🔐-does-not-return-whether-the-mutex-was-locked)).
+Natively, it should return 👎 while another thread holds the lock, but the official compiler's `🔐` is missing the code that returns whether it could lock, so the result is not guaranteed ([EJ030](../about/known-issues.md#EJ030)).
 
 ```keywords
 mutex

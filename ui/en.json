@@ -239,8 +239,6 @@
   "内蔵コンパイラ": "Built-in compiler",
   "Emojicode IDE には、公式の Emojicode コンパイラが入っています。コンパイルも実行もお使いの端末の中で行うので、書いたコードがサーバーに送られることはありません。": "Emojicode IDE includes the official Emojicode compiler. Compiling and running both happen on your own device, so your code is never sent to a server.",
   "また、Emojicode の開発元とは関係なく、個人で作っています。": "Also, this is a personal project, not affiliated with the Emojicode developers.",
-  "公式のコンパイラで見つかったバグのうち {count} 件は、この IDE では直してあります。{patched}と、{known}は、それぞれドキュメントにまとめています。": "{count} bugs found in the official compiler are fixed in this IDE. The docs list the {patched} and the {known}.",
-  "修正済みのバグ": "fixed bugs",
-  "まだ残っているバグ": "bugs that remain",
+  "公式のコンパイラで見つかっているバグは、{known}にまとめています。": "Bugs found in the official compiler are listed in the {known}.",
   "さあ、Emojicode を始めましょう！": "Let's get started with Emojicode!"
 }

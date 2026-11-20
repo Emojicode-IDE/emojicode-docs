@@ -208,11 +208,11 @@ String: x
 String and number: x 3
 ```
 
-What tells them apart is the name, whether it is `❗️` or `❓`, the number of arguments, and the argument types. Methods that differ only in their return type are not told apart. Even if you write two methods whose argument types are exactly the same, you don't get a compile error; the one written later is silently used when you call it ([Emojicode Language Bugs](../about/known-issues.md)).
+What tells them apart is the name, whether it is `❗️` or `❓`, the number of arguments, and the argument types. Methods that differ only in their return type are not told apart. Even if you write two methods whose argument types are exactly the same, you don't get a compile error; the one written later is silently used when you call it ([EJ020](../about/known-issues.md#EJ020)).
 
 ### Which one is called
 
-The compiler first collects the methods whose name and argument count match and whose arguments can all accept the values you pass. If there is only one, it calls that one. If there are two or more, it picks the one with narrower argument types (but the rule about generics on a single method, explained below, applies first). If `🐕` inherits from `🐾`, `🐕` is the narrower one, and `⚪️` is wider than any type.
+The compiler first collects the methods whose name and argument count match and whose arguments can all accept the values you pass. If there is only one, it calls that one. If there are two or more, it picks the one with narrower argument types (but the rule about generics on a single method, explained below, applies first). If `🐕` inherits from `🐾`, `🐕` is the narrower one. `⚪️` is wider than any type, but in the official compiler, just writing a method whose argument type is `⚪️` makes it stop on an internal check ([EJ032](../about/known-issues.md#EJ032)).
 
 ```emojicode
 🐇 🐾 🍇
@@ -225,10 +225,6 @@ The compiler first collects the methods whose name and argument count match and 
 🐇 🔎 🍇
   🆕 🍇🍉
 
-  ❗️ 📄 a ⚪️ 🍇
-    😀 🔤anything🔤❗️
-  🍉
-
   ❗️ 📄 a 🐾 🍇
     😀 🔤animal🔤❗️
   🍉
@@ -240,7 +236,6 @@ The compiler first collects the methods whose name and argument count match and 
 
 🏁 🍇
   🆕🔎❗️ ➡️ f
-  📄 f 1❗️
   📄 f 🆕🐾❗️❗️
   📄 f 🆕🐕❗️❗️
   🖍🆕 pet 🐾
@@ -250,7 +245,6 @@ The compiler first collects the methods whose name and argument count match and 
 ```
 
 ```output
-anything
 animal
 dog
 animal
@@ -387,7 +381,7 @@ access control
 You can use most emoji as names for methods and types, but you cannot use these:
 
 - Emoji reserved as operators or keywords, such as `➕` `✖️` `🔁` `↩️`
-- Relatively new emoji, such as `🟢` `🟡` (because the compiler's list of known emoji is old; see [Emojicode Language Bugs](../about/known-issues.md))
+- Relatively new emoji, such as `🟢` `🟡` (because the compiler's list of known emoji is old; see [EJ021](../about/known-issues.md#EJ021))
 
 If you use one of them, you get the compile error `Expected Identifier`.
 

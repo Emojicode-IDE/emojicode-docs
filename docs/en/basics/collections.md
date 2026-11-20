@@ -95,7 +95,7 @@ aBc
 | `🐻 list value❗️` | Add to the end |
 | `value ➡️ 🐽list index❗️` | Replace the element at that index |
 | `🐨 list index❗️` | Remove the element at that index |
-| `🐼 list❗️` | Take out the last element and remove it (`🍬`; no value if the list is empty) |
+| `🐼 list❗️` | Take out the last element and remove it (`🍬`; cannot be used on an empty list, [EJ002](../about/known-issues.md#EJ002)) |
 | `🐵 list index value❗️` | Insert before that index (returns whether it was inserted as `👌`) |
 | `🐥 list other list❗️` | Add all elements of the other list to the end |
 | `🐗 list❗️` | Remove all elements |

@@ -128,7 +128,7 @@ For a real number, `🔡 number digits❗️` lets you choose how many digits af
 2.500
 ```
 
-> When a real number is turned into a string, digits beyond the ones you asked for are **truncated, not rounded** (`🔡 3.05 2❗️` can even become `3.04`). This is a bug in the official compiler. See [Emojicode Language Bugs](../about/known-issues.md) for details.
+> When a real number is turned into a string, digits beyond the ones you asked for are **truncated, not rounded** (`🔡 3.05 2❗️` can even become `3.04`). This is a bug in the official compiler ([EJ011](../about/known-issues.md#EJ011)).
 
 ### String → number
 
@@ -282,6 +282,8 @@ Starts with 🍇
 ```
 
 Positions in `🔪` count from 0. It takes 2 characters starting at position 1 of `🍎🍌🍇🍑`, so the result is `🍌🍇`. Even if an emoji is made of several code points, it counts as one visible character.
+
+If the last character is a non-ASCII character such as Japanese or an emoji, `🔧` breaks it ([EJ013](../about/known-issues.md#EJ013)).
 
 > `📐 string❗️` returns the number of **bytes** in UTF-8, not the number of characters. `📐 🔤えもじ🔤❗️` is 9.
 
@@ -468,7 +470,7 @@ abc comes first
 
 The 5-byte `apple` comes first and the 3-byte `fig` comes last. `kiwi` and `pear` both have 4 bytes, and `k` is smaller than `p`, so `kiwi` comes first.
 
-In the official compiler, `↔️` has a bug where it returns the result of C's `memcmp` as is instead of -1, 0, or 1 (on WebAssembly, the difference of the first differing bytes: -23 for `🔤abc🔤` and `🔤abz🔤`); this IDE fixes it (see [Fixed Bugs](../about/patched.md)).
+When the byte counts are equal, `↔️` returns the result of C's `memcmp` as is instead of -1, 0, or 1 (-23 for `🔤abc🔤` and `🔤abz🔤`). Look only at the sign of the result ([EJ014](../about/known-issues.md#EJ014)).
 
 ```keywords
 compare
@@ -590,7 +592,7 @@ slow
 | `🐻🔸💧 🔠 byte❗️` | Append a single byte (`💧`) |
 | `🐻🔸🔣 🔠 code-point❗️` | Append the character for that code point (if it isn't a valid code point, do nothing and return `👎`) |
 
-`🐺` and `🐻🔸💧` don't check that the contents are still valid UTF-8 afterwards. If the bytes become invalid, what happens next is undefined. `🐻🔸🔣` rejects negative numbers, surrogates (`0xD800`–`0xDFFF`), and numbers of `0x110000` or more. The official compiler has a bug where it accepts surrogates; this IDE fixes it (see [Fixed Bugs](../about/patched.md)).
+`🐺` and `🐻🔸💧` don't check that the contents are still valid UTF-8 afterwards. If the bytes become invalid, what happens next is undefined. `🐻🔸🔣` rejects negative numbers and numbers of `0x110000` or more, but accepts surrogates (`0xD800`–`0xDFFF`) ([EJ015](../about/known-issues.md#EJ015)).
 
 Also, `🧠 string❗️` and `🧠 🔠❗️` return the memory (`🧠`) holding the contents without copying it. You can call them outside `☣️`, but every method that reads or writes the returned memory can only be used inside `☣️` ([The contents of strings and byte sequences (🧠)](../advanced/misc.md#The-contents-of-strings-and-byte-sequences-🧠)).
 
