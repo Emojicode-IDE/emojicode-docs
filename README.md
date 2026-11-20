@@ -13,6 +13,7 @@ The manuscripts of the [Emojicode IDE](https://emojicode-ide.com/) documentation
 |---|---|
 | `docs/` | 日本語の原稿（原文）と目次 `_toc.json` / Japanese manuscripts (the originals) and the table of contents |
 | `docs/<lang>/` | ほかの言語の原稿（日本語と同じ slug）/ Translations, with the same slugs as the Japanese pages |
+| `changelog/` | Changelog（1 回ごとに 1 ファイル、名前は日付）。英語版は `changelog/en/` / Changelog entries, one file per release named by date; English in `changelog/en/` |
 | `ui/<lang>.json` | 画面の文言の翻訳（キーは日本語の原文）/ UI translations (keys are the original Japanese strings) |
 
 `docs/basics/strings.md` は https://emojicode-ide.com/docs/basics/strings/ に、`docs/en/basics/strings.md` は https://emojicode-ide.com/en/docs/basics/strings/ になります。

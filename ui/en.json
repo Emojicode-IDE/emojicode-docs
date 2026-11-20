@@ -240,5 +240,7 @@
   "Emojicode IDE には、公式の Emojicode コンパイラが入っています。コンパイルも実行もお使いの端末の中で行うので、書いたコードがサーバーに送られることはありません。": "Emojicode IDE includes the official Emojicode compiler. Compiling and running both happen on your own device, so your code is never sent to a server.",
   "また、Emojicode の開発元とは関係なく、個人で作っています。": "Also, this is a personal project, not affiliated with the Emojicode developers.",
   "公式のコンパイラで見つかっているバグは、{known}にまとめています。": "Bugs found in the official compiler are listed in the {known}.",
-  "さあ、Emojicode を始めましょう！": "Let's get started with Emojicode!"
+  "さあ、Emojicode を始めましょう！": "Let's get started with Emojicode!",
+  "Emojicode IDE で変わったところと、新しくできるようになったことのお知らせです。": "What has changed in Emojicode IDE, and what you can do now that you couldn't before.",
+  "詳しく読む": "Read more"
 }
